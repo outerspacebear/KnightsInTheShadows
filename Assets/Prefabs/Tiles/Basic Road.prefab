@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 629713553788847142}
   m_Layer: 0
   m_Name: Basic Road
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26c0575b4256e2c4db8b86987ccd50f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
   canMoveOver: 1
   movementCost: 1
 --- !u!65 &629713553788847142

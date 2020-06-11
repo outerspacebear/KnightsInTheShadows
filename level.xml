@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<map>
+  <row>
+    <cell>
+      <tile>
+        <id>1</id>
+        <floor>0</floor>
+      </tile>
+    </cell>
+    <cell>
+      <tile>
+        <id>12</id>
+        <floor>0</floor>
+      </tile>
+      <tile>
+        <id>14</id>
+        <floor>1</floor>
+      </tile>
+    </cell>
+  </row>
+  <row>
+    <cell>
+      <tile>
+        <id>8</id>
+        <floor>0</floor>
+      </tile>
+    </cell>
+    <cell>
+      <tile>
+        <id>5</id>
+        <floor>0</floor>
+      </tile>
+    </cell>
+  </row>
+</map>
