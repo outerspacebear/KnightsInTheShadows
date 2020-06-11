@@ -3,31 +3,27 @@
   <row>
     <cell>
       <tile>
-        <id>1</id>
+        <id>0</id>
         <floor>0</floor>
       </tile>
     </cell>
     <cell>
       <tile>
-        <id>12</id>
+        <id>0</id>
         <floor>0</floor>
-      </tile>
-      <tile>
-        <id>14</id>
-        <floor>1</floor>
       </tile>
     </cell>
   </row>
   <row>
     <cell>
       <tile>
-        <id>8</id>
+        <id>0</id>
         <floor>0</floor>
       </tile>
     </cell>
     <cell>
       <tile>
-        <id>5</id>
+        <id>0</id>
         <floor>0</floor>
       </tile>
     </cell>

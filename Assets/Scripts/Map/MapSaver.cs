@@ -52,7 +52,7 @@ public class MapSaver : MonoBehaviour
 
         XDocument xMap = new XDocument(xRoot);
         xMap.Save("level.xml");
-
+        Debug.Log("Level saved successfully!");
         return true;
     }
 
@@ -71,7 +71,7 @@ public class MapSaver : MonoBehaviour
 
         if(!hasSavedSomething)
         {
-            Debug.LogError("Failed to save row!");
+            Debug.Log("Coudln't find row at z = " + rowZ.ToString());
             return false;
         }
 
@@ -96,7 +96,7 @@ public class MapSaver : MonoBehaviour
 
         if (!hasSavedSomething)
         {
-            Debug.LogError("Failed to save cell!");
+            Debug.Log("Couldn't find cell at " + cellX.ToString() + ", " + cellZ.ToString());
             return false;
         }
 
