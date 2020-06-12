@@ -1,0 +1,82 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
+using System.IO;
+
+public class MapOperationsManager : MonoBehaviour
+{
+    public static class XMLFields
+    {
+        public const string ROOT = "map";
+        public const string ROW = "row";
+        public const string CELL = "cell";
+        public const string TILE = "tile";
+        public const string ID = "id";
+    }
+
+    public struct MapProperties
+    {
+        public float tileWidth;
+        public float tileHeight;
+        public Vector3 startingPosition;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        mapLoadProperties.tileWidth = mapSaveProperties.tileWidth = tileWidth;
+        mapLoadProperties.tileHeight = mapSaveProperties.tileHeight = tileHeight;
+
+        mapLoadProperties.startingPosition = mapLoadStartingPosition;
+
+        mapSaveProperties.startingPosition = mapSaveBaseTileTransform.position;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            LoadMap("level.xml");
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SaveMap("level");
+        }
+    }
+
+    void LoadMap(string mapFile)
+    {
+        MapLoader mapLoader = new MapLoader(mapLoadProperties, GetAllTilePrefabs(), tileContainerTransform);
+        mapLoader.LoadMap("level.xml");
+    }
+
+    void SaveMap(string fileName)
+    {
+        MapSaver mapSaver = new MapSaver(mapSaveProperties);
+        mapSaver.SaveMap(fileName);
+    }
+
+    GameObject[] GetAllTilePrefabs()
+    {
+        var tilePrefabs = Resources.LoadAll("Prefabs/Tiles", typeof(GameObject)).Cast<GameObject>().ToArray();
+        return tilePrefabs;
+    }
+
+    [SerializeField]
+    float tileWidth = 1.0f;
+    [SerializeField]
+    float tileHeight = 2.0f;
+
+    [SerializeField]
+    Vector3 mapLoadStartingPosition = Vector3.zero;
+    [SerializeField][Tooltip("Instantiated tiles will be parented to this transform when loading a map.")]
+    Transform tileContainerTransform;
+
+    [SerializeField][Tooltip("Set to bottom-left-most tile when saving a map.")]
+    Transform mapSaveBaseTileTransform;
+
+    MapProperties mapLoadProperties;
+    MapProperties mapSaveProperties;
+}

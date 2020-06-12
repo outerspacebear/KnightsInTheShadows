@@ -2,45 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Xml.Linq;
+using MapProperties = MapOperationsManager.MapProperties;
 
-//Attach this script to the bottom-left corner tile on the map, play, and press Enter to save the map
-public class MapSaver : MonoBehaviour
+public class MapSaver
 {
-    private static class XMLFields
+    public MapSaver(MapProperties properties)
     {
-        public const string ROOT = "map";
-        public const string ROW = "row";
-        public const string CELL = "cell";
-        public const string TILE = "tile";
-        public const string ID = "id";
-        public const string FLOOR = "floor";
+        mapProperties = properties;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public bool SaveMap(string fileName)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Return))
-        {
-            SaveMap();
-        }
-    }
-
-    bool SaveMap()
-    {
-        XElement xRoot = new XElement(XMLFields.ROOT);
+        XElement xRoot = new XElement(MapOperationsManager.XMLFields.ROOT);
 
         bool hasSavedSomething = false;
-        float rowZ = gameObject.transform.position.z;
+        float rowZ = mapProperties.startingPosition.z;
 
         while(SaveRow(rowZ, xRoot))
         {
-            rowZ += tileWidth;
+            rowZ += mapProperties.tileWidth;
             hasSavedSomething = true;
         }
 
@@ -51,21 +31,21 @@ public class MapSaver : MonoBehaviour
         }
 
         XDocument xMap = new XDocument(xRoot);
-        xMap.Save("level.xml");
+        xMap.Save(fileName + ".xml");
         Debug.Log("Level saved successfully!");
         return true;
     }
 
     bool SaveRow(float rowZ, XElement XMLRoot)
     {
-        XElement xRow = new XElement(XMLFields.ROW);
+        XElement xRow = new XElement(MapOperationsManager.XMLFields.ROW);
 
         bool hasSavedSomething = false;
-        float cellX = gameObject.transform.position.x;
+        float cellX = mapProperties.startingPosition.x;
 
         while(SaveCell(cellX, rowZ, xRow))
         {
-            cellX += tileWidth;
+            cellX += mapProperties.tileWidth;
             hasSavedSomething = true;
         }
 
@@ -81,16 +61,14 @@ public class MapSaver : MonoBehaviour
 
     bool SaveCell(float cellX, float cellZ, XElement XMLRow)
     {
-        XElement xCell = new XElement(XMLFields.CELL);
+        XElement xCell = new XElement(MapOperationsManager.XMLFields.CELL);
 
         bool hasSavedSomething = false;
-        Vector3 tilePosition = new Vector3(cellX, gameObject.transform.position.y, cellZ);
-        int currentFloor = 0;
+        Vector3 tilePosition = new Vector3(cellX, mapProperties.startingPosition.y, cellZ);
 
-        while(SaveTile(tilePosition, currentFloor, xCell))
+        while(SaveTile(tilePosition, xCell))
         {
-            tilePosition.y += tileHeight;
-            ++currentFloor;
+            tilePosition.y += mapProperties.tileHeight;
             hasSavedSomething = true;
         }
 
@@ -104,7 +82,7 @@ public class MapSaver : MonoBehaviour
         return true;
     }
 
-    bool SaveTile(Vector3 position, int currentFloor, XElement XMLCell)
+    bool SaveTile(Vector3 position, XElement XMLCell)
     {
         if(allTileObjects == null)
         {
@@ -118,9 +96,8 @@ public class MapSaver : MonoBehaviour
             return false;
         }
 
-        XElement xTile = new XElement(XMLFields.TILE
-            , new XElement(XMLFields.ID, currentTileObject.GetComponent<Tile>().GetId())
-            , new XElement(XMLFields.FLOOR, currentFloor));
+        XElement xTile = new XElement(MapOperationsManager.XMLFields.TILE
+            , new XElement(MapOperationsManager.XMLFields.ID, currentTileObject.GetComponent<Tile>().GetId()));
         XMLCell.Add(xTile);
 
         return true;
@@ -138,10 +115,7 @@ public class MapSaver : MonoBehaviour
         return null;
     }
 
-    [SerializeField]
-    private float tileWidth = 1.0f;
-    [SerializeField]
-    private float tileHeight = 2.0f;
+    MapProperties mapProperties;
 
     private static GameObject[] allTileObjects = null;
 }
