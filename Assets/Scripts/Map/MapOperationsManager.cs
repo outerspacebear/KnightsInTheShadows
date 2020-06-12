@@ -42,14 +42,18 @@ public class MapOperationsManager : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SaveMap("level");
+            SaveMap(levelSaveName);
         }
     }
 
     void LoadMap(string mapFile)
     {
         MapLoader mapLoader = new MapLoader(mapLoadProperties, GetAllTilePrefabs(), tileContainerTransform);
-        mapLoader.LoadMap("level.xml");
+        var virtualMap = mapLoader.LoadMap("level.xml");
+        if(virtualMap != null)
+        {
+            Debug.Log("Map loaded successfully!");
+        }
     }
 
     void SaveMap(string fileName)
@@ -74,6 +78,8 @@ public class MapOperationsManager : MonoBehaviour
     [SerializeField][Tooltip("Instantiated tiles will be parented to this transform when loading a map.")]
     Transform tileContainerTransform;
 
+    [SerializeField][Tooltip("Name used when saving the level")]
+    string levelSaveName = "level";
     [SerializeField][Tooltip("Set to bottom-left-most tile when saving a map.")]
     Transform mapSaveBaseTileTransform;
 
