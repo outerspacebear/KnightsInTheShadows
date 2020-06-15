@@ -48,7 +48,7 @@ public class MapOperationsManager : MonoBehaviour
 
     void LoadMap(string mapFile)
     {
-        MapLoader mapLoader = new MapLoader(mapLoadProperties, GetAllTilePrefabs(), tileContainerTransform);
+        MapLoader mapLoader = new MapLoader(mapLoadProperties, GetAllTilePrefabs(), tileContainerTransform, baseGround);
         var virtualMap = mapLoader.LoadMap("level.xml");
         if(virtualMap != null)
         {
@@ -77,6 +77,8 @@ public class MapOperationsManager : MonoBehaviour
     Vector3 mapLoadStartingPosition = Vector3.zero;
     [SerializeField][Tooltip("Instantiated tiles will be parented to this transform when loading a map.")]
     Transform tileContainerTransform;
+    [SerializeField][Tooltip("GameObject to be generated as the base ground below each cell. Leave blank if no base ground should be generated.")]
+    GameObject baseGround = null;
 
     [SerializeField][Tooltip("Name used when saving the level")]
     string levelSaveName = "level";

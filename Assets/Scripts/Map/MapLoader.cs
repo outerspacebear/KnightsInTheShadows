@@ -10,11 +10,12 @@ using UnityEngine.Tilemaps;
 
 public class MapLoader
 {
-    public MapLoader(MapProperties properties, GameObject[] allTilePrefabs, Transform parentTransformForTiles = null)
+    public MapLoader(MapProperties properties, GameObject[] allTilePrefabs, Transform parentTransformForTiles = null, GameObject baseGround = null)
     {
         mapProperties = properties;
         tilePrefabs = allTilePrefabs;
         parentTransform = parentTransformForTiles;
+        baseGroundPrefab = baseGround;
     }
 
     public VirtualMap LoadMap(string sourceFile)
@@ -78,10 +79,17 @@ public class MapLoader
 
         var xTiles = xCell.Elements(XMLFields.TILE);
 
+        //Generate base ground below each cell, if enabled
+        if (baseGroundPrefab)
+        {
+            UnityEngine.Object.Instantiate(baseGroundPrefab, new Vector3(cellX, mapProperties.startingPosition.y - mapProperties.tileHeight, cellZ)
+                , Quaternion.identity);
+        }
+
         float tileY = mapProperties.startingPosition.y;
         Vector3 tilePosition = new Vector3(cellX, tileY, cellZ);
 
-        foreach(var xTile in xTiles)
+        foreach (var xTile in xTiles)
         {
             if(!LoadTile(tilePosition, xTile, loadedCell))
             {
@@ -153,4 +161,5 @@ public class MapLoader
     MapProperties mapProperties;
     GameObject[] tilePrefabs;
     Transform parentTransform;
+    GameObject baseGroundPrefab;
 }

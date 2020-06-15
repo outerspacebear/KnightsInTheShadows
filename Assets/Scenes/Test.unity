@@ -777,6 +777,8 @@ MonoBehaviour:
   tileHeight: 2
   mapLoadStartingPosition: {x: 0, y: 0, z: 2}
   tileContainerTransform: {fileID: 1266750928}
+  baseGround: {fileID: 7469483384127896752, guid: e751163454107b04b85f8f0b4addfa2a,
+    type: 3}
   levelSaveName: level
   mapSaveBaseTileTransform: {fileID: 5006512736052618416}
 --- !u!1 &1909933489
