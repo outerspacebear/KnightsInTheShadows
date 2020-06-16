@@ -107,5 +107,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  canMoveOver: 1
+  canMoveOn: 1
   movementCost: 1

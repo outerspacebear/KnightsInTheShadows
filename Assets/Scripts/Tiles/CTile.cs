@@ -24,7 +24,7 @@ public class CTile : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if(tileHighlighter)
+        if(tileHighlighter && canMoveOn)
         {
             tileHighlighter.transform.position = gameObject.transform.position;
         }
@@ -32,7 +32,7 @@ public class CTile : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if(tileHighlighter)
+        if(tileHighlighter && canMoveOn)
         {
             tileHighlighter.transform.position = tileHighlighterOriginalPosition;
         }
@@ -41,7 +41,7 @@ public class CTile : MonoBehaviour
     [SerializeField]
     private int id;
     [SerializeField]
-    private bool canMoveOver;
+    private bool canMoveOn;
     [SerializeField]
     private int movementCost;
 
