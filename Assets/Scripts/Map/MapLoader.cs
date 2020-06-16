@@ -18,10 +18,10 @@ public class MapLoader
         baseGroundPrefab = baseGround;
     }
 
-    public VirtualMap LoadMap(string sourceFile)
+    public TileMap LoadMap(string sourceFile)
     {
-        VirtualMap.Map loadedMap = new VirtualMap.Map();
-        loadedMap.rows = new List<VirtualMap.Row>();
+        TileMap.Map loadedMap = new TileMap.Map();
+        loadedMap.rows = new List<TileMap.Row>();
 
         XDocument xFile = XDocument.Load(sourceFile);
         if(xFile == null)
@@ -46,13 +46,13 @@ public class MapLoader
             rowZ += mapProperties.tileWidth;
         }
 
-        return new VirtualMap(loadedMap);
+        return new TileMap(loadedMap);
     }
 
-    bool LoadRow(float rowZ, XElement xRow, VirtualMap.Map virtualMap)
+    bool LoadRow(float rowZ, XElement xRow, TileMap.Map virtualMap)
     {
-        VirtualMap.Row loadedRow = new VirtualMap.Row();
-        loadedRow.cells = new List<VirtualMap.Cell>();
+        TileMap.Row loadedRow = new TileMap.Row();
+        loadedRow.cells = new List<TileMap.Cell>();
 
         var xCells = xRow.Elements(XMLFields.CELL);
         float cellX = mapProperties.startingPosition.x;
@@ -72,10 +72,10 @@ public class MapLoader
         return true;
     }
 
-    bool LoadCell(float cellZ, float cellX, XElement xCell, VirtualMap.Row virtualRow)
+    bool LoadCell(float cellZ, float cellX, XElement xCell, TileMap.Row virtualRow)
     {
-        VirtualMap.Cell loadedCell = new VirtualMap.Cell();
-        loadedCell.tiles = new List<VirtualMap.Tile>();
+        TileMap.Cell loadedCell = new TileMap.Cell();
+        loadedCell.tiles = new List<CTile>();
 
         var xTiles = xCell.Elements(XMLFields.TILE);
 
@@ -104,18 +104,16 @@ public class MapLoader
         return true;
     }
 
-    bool LoadTile(Vector3 position, XElement xTile, VirtualMap.Cell virtualCell)
+    bool LoadTile(Vector3 position, XElement xTile, TileMap.Cell virtualCell)
     {
-        VirtualMap.Tile loadedTile = new VirtualMap.Tile();
-
         string tileIDStr = xTile.Element(XMLFields.ID).Value;
+
         int tileID;
         if(!int.TryParse(tileIDStr, out tileID))
         {
             Debug.LogError("Tile ID \"" + tileIDStr + "\" is not an int!");
             return false;
         }
-        loadedTile.ID = tileID;
 
         GameObject tileObject = GetTilePrefabForID(tileID);
         if(tileObject == null)
@@ -124,16 +122,23 @@ public class MapLoader
             return false;
         }
 
+        GameObject loadedTile = null;
         if (parentTransform != null)
         {
-            UnityEngine.Object.Instantiate(tileObject, position, Quaternion.identity, parentTransform);
+            loadedTile = UnityEngine.Object.Instantiate(tileObject, position, Quaternion.identity, parentTransform);
         }
         else
         {
-            UnityEngine.Object.Instantiate(tileObject, position, Quaternion.identity);
+            loadedTile = UnityEngine.Object.Instantiate(tileObject, position, Quaternion.identity);
         }
 
-        virtualCell.tiles.Add(loadedTile);
+        if(!loadedTile)
+        {
+            Debug.Log("Couldn't instantiate prefab " + tileObject.name);
+            return false;
+        }
+
+        virtualCell.tiles.Add(loadedTile.GetComponent<CTile>());
         return true;
     }
 
@@ -141,7 +146,7 @@ public class MapLoader
     {
         foreach(var tileObject in tilePrefabs)
         {
-            TileProperties tileComponent = tileObject.GetComponent<TileProperties>();
+            CTile tileComponent = tileObject.GetComponent<CTile>();
             if(tileComponent == null)
             {
                 Debug.LogError("No Tile component attached to prefab " + tileObject.name);

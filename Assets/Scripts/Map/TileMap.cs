@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VirtualMap
+public class TileMap
 {
-    public struct Tile
-    {
-        public int ID;
-    }
     public struct Cell
     {
-        public List<Tile> tiles;
+        public List<CTile> tiles;
     }
     public struct Row
     {
@@ -21,7 +17,7 @@ public class VirtualMap
         public List<Row> rows;
     }
 
-    public VirtualMap(Map map) 
+    public TileMap(Map map) 
     {
         this.map = map;
     }

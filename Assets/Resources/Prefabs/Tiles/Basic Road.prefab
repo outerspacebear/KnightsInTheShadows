@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4059069554543216651}
   - component: {fileID: 4976390718569968189}
   - component: {fileID: 1599685606355635908}
-  - component: {fileID: 4560928894105554785}
   - component: {fileID: 629713553788847142}
+  - component: {fileID: 4786960543224604772}
   m_Layer: 0
   m_Name: Basic Road
   m_TagString: Tile
@@ -81,21 +81,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4560928894105554785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1013291885528103448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26c0575b4256e2c4db8b86987ccd50f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 0
-  canMoveOver: 1
-  movementCost: 1
 --- !u!65 &629713553788847142
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -109,3 +94,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 0.024999999, z: 0.99999994}
   m_Center: {x: 0, y: 0.012499999, z: 0}
+--- !u!114 &4786960543224604772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013291885528103448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 701b2cd03e03a3d459a147b2eea253e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  canMoveOver: 1
+  movementCost: 1

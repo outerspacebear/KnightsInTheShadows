@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileProperties : MonoBehaviour
+public class CTile : MonoBehaviour
 {
     public int GetId() { return id; }
 
