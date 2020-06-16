@@ -13,6 +13,7 @@ public class MapOperationsManager : MonoBehaviour
         public const string CELL = "cell";
         public const string TILE = "tile";
         public const string ID = "id";
+        public const string Y_ROTATION = "yRotation";
     }
 
     public struct MapProperties
