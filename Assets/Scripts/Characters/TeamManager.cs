@@ -18,6 +18,11 @@ public class TeamManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            TrySelectNextAvailableCharacter();
+        }
+
         if (!currentlySelectedCharacter)
         {
             if (!TrySelectNextAvailableCharacter())
@@ -42,7 +47,7 @@ public class TeamManager : MonoBehaviour
 
     void OnCharacterClickedOn(CCharacter character)
     {
-        if(character.currentActionPoints > 0)
+        if(character.currentActionPoints > 0 && currentlySelectedCharacter != character)
         {
             SelectCharacter(character);
         }
@@ -50,9 +55,10 @@ public class TeamManager : MonoBehaviour
 
     bool TrySelectNextAvailableCharacter()
     {
+        Debug.Log("Trying to select next available character!");
         foreach (var character in characters)
         {
-            if (character.currentActionPoints > 0)
+            if (character != currentlySelectedCharacter && character.currentActionPoints > 0)
             {
                 SelectCharacter(character);
                 return true;
