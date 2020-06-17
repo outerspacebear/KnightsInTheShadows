@@ -4,11 +4,37 @@
     <cell>
       <tile>
         <id>0</id>
+        <yRotation>0</yRotation>
       </tile>
     </cell>
     <cell>
       <tile>
         <id>0</id>
+        <yRotation>0</yRotation>
+      </tile>
+    </cell>
+    <cell>
+      <tile>
+        <id>1</id>
+        <yRotation>0</yRotation>
+      </tile>
+      <tile>
+        <id>5</id>
+        <yRotation>0</yRotation>
+      </tile>
+      <tile>
+        <id>2</id>
+        <yRotation>0</yRotation>
+      </tile>
+    </cell>
+    <cell>
+      <tile>
+        <id>3</id>
+        <yRotation>0</yRotation>
+      </tile>
+      <tile>
+        <id>4</id>
+        <yRotation>0</yRotation>
       </tile>
     </cell>
   </row>
@@ -16,11 +42,13 @@
     <cell>
       <tile>
         <id>0</id>
+        <yRotation>0</yRotation>
       </tile>
     </cell>
     <cell>
       <tile>
         <id>0</id>
+        <yRotation>0</yRotation>
       </tile>
     </cell>
   </row>

@@ -97,7 +97,8 @@ public class MapSaver
         }
 
         XElement xTile = new XElement(MapOperationsManager.XMLFields.TILE
-            , new XElement(MapOperationsManager.XMLFields.ID, currentTileObject.GetComponent<CTile>().GetId()));
+            , new XElement(MapOperationsManager.XMLFields.ID, currentTileObject.GetComponent<CTile>().GetId())
+            , new XElement(MapOperationsManager.XMLFields.Y_ROTATION, currentTileObject.transform.rotation.eulerAngles.y));
         XMLCell.Add(xTile);
 
         return true;

@@ -7,6 +7,7 @@ using XMLFields = MapOperationsManager.XMLFields;
 using UnityEngine.Assertions;
 using System;
 using UnityEngine.Tilemaps;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class MapLoader
 {
@@ -122,14 +123,24 @@ public class MapLoader
             return false;
         }
 
+        string tileYRotationStr = xTile.Element(XMLFields.Y_ROTATION).Value;
+        float tileYRotation;
+        if(!float.TryParse(tileYRotationStr, out tileYRotation))
+        {
+            Debug.LogError("Tile rotation " + tileYRotationStr + " isn't a float!");
+            return false;
+        }
+        Quaternion tileSpawnRotation = Quaternion.identity;
+        tileSpawnRotation.eulerAngles = new Vector3(0.0f, tileYRotation, 0.0f);
+
         GameObject loadedTile = null;
         if (parentTransform != null)
         {
-            loadedTile = UnityEngine.Object.Instantiate(tileObject, position, Quaternion.identity, parentTransform);
+            loadedTile = UnityEngine.Object.Instantiate(tileObject, position, tileSpawnRotation, parentTransform);
         }
         else
         {
-            loadedTile = UnityEngine.Object.Instantiate(tileObject, position, Quaternion.identity);
+            loadedTile = UnityEngine.Object.Instantiate(tileObject, position, tileSpawnRotation);
         }
 
         if(!loadedTile)
