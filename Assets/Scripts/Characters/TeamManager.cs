@@ -7,12 +7,15 @@ public class TeamManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(!currentlySelectedCharacter)
-        {
-            TrySelectNextAvailableCharacter();
-        }
-
+        MapLoadedEvent.Get().AddListener(OnMapLoaded);
         CharacterClickedOnEvent.Get().AddListener(OnCharacterClickedOn);
+        TileClickedOnEvent.Get().AddListener(OnTileClickedOn);
+    }
+
+    ~TeamManager()
+    {
+        CharacterClickedOnEvent.Get().RemoveListener(OnCharacterClickedOn);
+        TileClickedOnEvent.Get().RemoveListener(OnTileClickedOn);
     }
 
     // Update is called once per frame
@@ -21,14 +24,6 @@ public class TeamManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Tab))
         {
             TrySelectNextAvailableCharacter();
-        }
-
-        if (!currentlySelectedCharacter)
-        {
-            if (!TrySelectNextAvailableCharacter())
-            {
-                Debug.Log("All characters on this team have taken their turn");
-            }
         }
     }
 
@@ -80,6 +75,22 @@ public class TeamManager : MonoBehaviour
         currentlySelectedCharacter.OnSelected();
 
         Debug.Log("Character " + currentlySelectedCharacter.name + " selected!");
+    }
+
+    void OnTileClickedOn(CTile tile)
+    {
+        if(currentlySelectedCharacter.tilesInMovementRange.Contains(tile))
+        {
+            currentlySelectedCharacter.MoveTo(tile);
+        }
+    }
+
+    void OnMapLoaded(TileMap map)
+    {
+        if (!currentlySelectedCharacter)
+        {
+            TrySelectNextAvailableCharacter();
+        }
     }
 
     [SerializeField]

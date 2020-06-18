@@ -6,14 +6,30 @@ public class CTile : MonoBehaviour
 {
     public int GetId() { return id; }
 
-    // Start is called before the first frame update
-    void Start()
+    public int GetMovementCost() { return movementCost; }
+
+    public bool CanMoveOn() { return canMoveOn; }
+
+    public void EnableMovementRangeHighlight()
+    {
+        meshRenderer.material.color = Color.cyan;
+    }
+
+    public void DisableMovementRangeHighlight()
+    {
+        meshRenderer.material.color = meshRendererOriginalColour;
+    }
+
+    private void Awake()
     {
         if(!tileHighlighter)
         {
             tileHighlighter = GameObject.Find("TileHighlighter");
             tileHighlighterOriginalPosition = tileHighlighter.transform.position;
         }
+
+        meshRenderer = gameObject.GetComponentInChildren<MeshRenderer>();
+        meshRendererOriginalColour = meshRenderer.material.color;
     }
 
     // Update is called once per frame
@@ -38,6 +54,12 @@ public class CTile : MonoBehaviour
         }
     }
 
+    private void OnMouseDown()
+    {
+        Debug.Log("Tile " + gameObject.name + " has been clicked on!");
+        TileClickedOnEvent.Get().Invoke(this);
+    }
+
     [SerializeField]
     private int id;
     [SerializeField]
@@ -47,4 +69,7 @@ public class CTile : MonoBehaviour
 
     private static GameObject tileHighlighter;
     private static Vector3 tileHighlighterOriginalPosition;
+
+    MeshRenderer meshRenderer;
+    Color meshRendererOriginalColour;
 }
