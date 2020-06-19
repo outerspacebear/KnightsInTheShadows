@@ -47,6 +47,8 @@ public class CCharacter : MonoBehaviour
         {
             tile.EnableMovementRangeHighlight();
         }
+
+        CharacterSelectedEvent.Get().Invoke(this);
     }
 
     public void OnDeselected()

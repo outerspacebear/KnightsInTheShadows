@@ -17,3 +17,18 @@ public class CharacterClickedOnEvent : UnityEvent<CCharacter>
 
     static CharacterClickedOnEvent mEvent = null;
 }
+
+[System.Serializable]
+public class CharacterSelectedEvent : UnityEvent<CCharacter>
+{
+    public static CharacterSelectedEvent Get()
+    {
+        if (mEvent == null)
+        {
+            mEvent = new CharacterSelectedEvent();
+        }
+        return mEvent;
+    }
+
+    static CharacterSelectedEvent mEvent = null;
+}
