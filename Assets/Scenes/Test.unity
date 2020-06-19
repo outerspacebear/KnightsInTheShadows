@@ -326,6 +326,7 @@ MonoBehaviour:
   horizontalSpacingFromCharacter: 3
   verticalSpacingFromCharacter: 4
   movementSpeed: 15
+  rotationSpeed: 12
 --- !u!1001 &653309566
 PrefabInstance:
   m_ObjectHideFlags: 0

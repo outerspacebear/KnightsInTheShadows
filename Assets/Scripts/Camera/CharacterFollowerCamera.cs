@@ -27,7 +27,7 @@ public class CharacterFollowerCamera : MonoBehaviour
         }
         else if(isRotating)
         {
-            float distanceToMove = movementSpeed * Time.deltaTime;
+            float distanceToMove = rotationSpeed * Time.deltaTime;
             transform.position = Vector3.Slerp(transform.position, targetPosition, distanceToMove);
             if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
             {
@@ -202,6 +202,8 @@ public class CharacterFollowerCamera : MonoBehaviour
 
     [SerializeField]
     float movementSpeed = 1.0f;
+    [SerializeField]
+    float rotationSpeed = 1.0f;
 
     CCharacter characterInFocus;
     Vector3 pointInFocus;
