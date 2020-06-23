@@ -51,7 +51,6 @@ public class MapLoader
 
         TileMap tileMap = new TileMap(loadedMap, mapProperties);
 
-        MapLoadedEvent.Get().Invoke(tileMap);
         return tileMap;
     }
 

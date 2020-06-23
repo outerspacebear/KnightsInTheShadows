@@ -5,6 +5,28 @@ using UnityEngine.Events;
 
 public class CCharacter : MonoBehaviour
 {
+    public enum EActions
+    {
+        MOVE
+    }
+
+    public static Dictionary<EActions, int> actionCostMap = new Dictionary<EActions, int>() { { EActions.MOVE, 1 } };
+
+    public void ResetActionPoints()
+    {
+        currentActionPoints = baseActionPoints;
+    }
+
+    public bool CanTakeAction(EActions action)
+    {
+        if(currentActionPoints >= actionCostMap[action])
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -12,20 +34,18 @@ public class CCharacter : MonoBehaviour
 
         currentActionPoints = baseActionPoints;
 
-        if(!(playerHighlilghter = GameObject.Find("PlayerHighlighter")))
+        if (!(playerHighlilghter = GameObject.Find("PlayerHighlighter")))
         {
             Debug.LogError("Coudln't find the player highlighter!");
             return;
         }
         playerHighlighterDefaultPosition = playerHighlilghter.transform.position;
-
-        tilesInMovementRange = new List<CTile>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnMouseDown()
@@ -36,24 +56,25 @@ public class CCharacter : MonoBehaviour
 
     public void OnSelected()
     {
-        if(playerHighlilghter)
+        if (playerHighlilghter)
         {
             playerHighlilghter.transform.position = gameObject.transform.position;
         }
 
         UpdateTilesWithinMovementRange();
 
-        foreach(var tile in tilesInMovementRange)
+        foreach (var tile in tilesInMovementRange)
         {
-            tile.EnableMovementRangeHighlight();
+            tile.EnableMovementRangeHighlight(tileHighlightColor);
         }
 
+        Debug.Log("Character " + name + " selected!");
         CharacterSelectedEvent.Get().Invoke(this);
     }
 
     public void OnDeselected()
     {
-        if(playerHighlilghter)
+        if (playerHighlilghter)
         {
             playerHighlilghter.transform.position = playerHighlighterDefaultPosition;
         }
@@ -62,11 +83,18 @@ public class CCharacter : MonoBehaviour
         {
             tile.DisableMovementRangeHighlight();
         }
+
+        Debug.Log("Character " + name + " de-selected!");
     }
 
     public void MoveTo(CTile tile)
     {
+        transform.position = tile.transform.position;
+        occupyingTile = tile;
+        currentActionPoints -= actionCostMap[EActions.MOVE];
 
+        Debug.Log("Character " + name + " moved to " + tile.transform.position.ToString());
+        CharacterEvents.actionTakenEvent.Invoke(this, EActions.MOVE);
     }
 
     void UpdateTilesWithinMovementRange()
@@ -77,7 +105,7 @@ public class CCharacter : MonoBehaviour
 
     void OnMapLoaded(TileMap map)
     {
-        if(CCharacter.map == null)
+        if (CCharacter.map == null)
         {
             CCharacter.map = map;
         }
@@ -87,14 +115,16 @@ public class CCharacter : MonoBehaviour
         occupyingTile = null;
         if (!(occupyingTile = map.TryGetTileAt(transform.position)))
         {
-            Debug.LogError("Character " + gameObject.name + " is not placed on a vald tile");
+            Debug.LogError("Character " + gameObject.name + " is not placed on a valid tile");
             return;
         }
     }
 
     public int currentActionPoints { get; set; }
     public CTile occupyingTile { get; set; }
-    public List<CTile> tilesInMovementRange { get; private set; }
+    public List<CTile> tilesInMovementRange { get; private set; } = new List<CTile>();
+    [SerializeField]
+    Color tileHighlightColor = Color.cyan;
 
     [SerializeField]
     private int movementPerAction;

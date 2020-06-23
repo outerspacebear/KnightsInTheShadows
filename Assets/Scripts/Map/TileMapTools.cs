@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public static class TileMapTools
 { 
@@ -15,7 +16,8 @@ public static class TileMapTools
             tilesCheckedForMovementCost.Clear();
         }
 
-        return GetTilesInRange(map, origin, availableMovementPoints);
+        var tiles = GetTilesInRange(map, origin, availableMovementPoints);
+        return tiles;
     }
 
     static List<CTile> GetTilesInRange(TileMap map, CTile origin, int availableMovementPoints)

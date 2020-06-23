@@ -10,9 +10,9 @@ public class CTile : MonoBehaviour
 
     public bool CanMoveOn() { return canMoveOn; }
 
-    public void EnableMovementRangeHighlight()
+    public void EnableMovementRangeHighlight(Color color)
     {
-        meshRenderer.material.color = Color.cyan;
+        meshRenderer.material.color = color;
     }
 
     public void DisableMovementRangeHighlight()
@@ -54,10 +54,13 @@ public class CTile : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
+    private void OnMouseOver()
     {
-        Debug.Log("Tile " + gameObject.name + " has been clicked on!");
-        TileClickedOnEvent.Get().Invoke(this);
+        if(Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            Debug.Log("Tile " + gameObject.name + " has been clicked on!");
+            TileClickedOnEvent.Get().Invoke(this);
+        }
     }
 
     [SerializeField]

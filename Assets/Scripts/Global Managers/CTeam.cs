@@ -2,25 +2,78 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamManager : MonoBehaviour
+public class CTeam : MonoBehaviour
 {
+    public void BeginTurn()
+    {
+        Debug.Log("Beginning turn for team " + name);
+
+        isTeamsTurn = true;
+        foreach(var character in characters)
+        {
+            character.ResetActionPoints();
+        }
+        currentlySelectedCharacter = null;
+
+        TrySelectNextAvailableCharacter();
+    }
+
+    public void OnEndTurn()
+    {
+        Debug.Log("Ending turn for team " + name);
+        currentlySelectedCharacter.OnDeselected();
+
+        isTeamsTurn = false;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        MapLoadedEvent.Get().AddListener(OnMapLoaded);
         CharacterClickedOnEvent.Get().AddListener(OnCharacterClickedOn);
         TileClickedOnEvent.Get().AddListener(OnTileClickedOn);
+        CharacterEvents.actionTakenEvent.AddListener(OnCharacterActionTaken);
     }
 
-    ~TeamManager()
+    ~CTeam()
     {
         CharacterClickedOnEvent.Get().RemoveListener(OnCharacterClickedOn);
         TileClickedOnEvent.Get().RemoveListener(OnTileClickedOn);
+        CharacterEvents.actionTakenEvent.RemoveListener(OnCharacterActionTaken);
+    }
+
+    void OnCharacterActionTaken(CCharacter character, CCharacter.EActions action)
+    {
+        if(!isTeamsTurn)
+        {
+            return;
+        }
+
+        Debug.Log("Character " + character.name + " did action " + action.ToString() 
+            + " and now has " + character.currentActionPoints.ToString() + " action points");
+
+        if (character.currentActionPoints > 0)
+        {
+            SelectCharacter(character);
+            return;
+        }
+
+        if (HaveAllCharactersEndedTurn())
+        {
+            TeamEvents.teamTurnEndedEvent.Invoke(this);
+            return;
+        }
+
+        TrySelectNextAvailableCharacter();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!isTeamsTurn)
+        {
+            return;
+        }
+
         if(Input.GetKeyDown(KeyCode.Tab))
         {
             TrySelectNextAvailableCharacter();
@@ -42,6 +95,11 @@ public class TeamManager : MonoBehaviour
 
     void OnCharacterClickedOn(CCharacter character)
     {
+        if(!isTeamsTurn)
+        {
+            return;
+        }
+
         if(character.currentActionPoints > 0 && currentlySelectedCharacter != character)
         {
             SelectCharacter(character);
@@ -60,7 +118,6 @@ public class TeamManager : MonoBehaviour
             }
         }
 
-        currentlySelectedCharacter = null;
         return false;
     }
 
@@ -73,27 +130,39 @@ public class TeamManager : MonoBehaviour
 
         currentlySelectedCharacter = character;
         currentlySelectedCharacter.OnSelected();
-
-        Debug.Log("Character " + currentlySelectedCharacter.name + " selected!");
     }
 
     void OnTileClickedOn(CTile tile)
     {
-        if(currentlySelectedCharacter.tilesInMovementRange.Contains(tile))
+        if(!isTeamsTurn)
+        {
+            return;
+        }
+
+        if(currentlySelectedCharacter.CanTakeAction(CCharacter.EActions.MOVE)
+            && currentlySelectedCharacter.tilesInMovementRange.Contains(tile)
+            && !IsAnyCharacterOnTile(tile))
         {
             currentlySelectedCharacter.MoveTo(tile);
         }
     }
 
-    void OnMapLoaded(TileMap map)
+    bool IsAnyCharacterOnTile(CTile tile)
     {
-        if (!currentlySelectedCharacter)
+        foreach(var character in characters)
         {
-            TrySelectNextAvailableCharacter();
+            if(character.occupyingTile == tile)
+            {
+                return true;
+            }
         }
+
+        return false;
     }
 
     [SerializeField]
     List<CCharacter> characters;
     CCharacter currentlySelectedCharacter;
+
+    bool isTeamsTurn = false;
 }
