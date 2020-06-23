@@ -47,7 +47,7 @@ public class MapOperationsManager : MonoBehaviour
         }
     }
 
-    void LoadMap(string mapFile)
+    public void LoadMap(string mapFile)
     {
         MapLoader mapLoader = new MapLoader(mapLoadProperties, GetAllTilePrefabs(), tileContainerTransform, baseGround);
         var virtualMap = mapLoader.LoadMap("level.xml");
@@ -72,7 +72,7 @@ public class MapOperationsManager : MonoBehaviour
     [SerializeField]
     float tileWidth = 1.0f;
     [SerializeField]
-    float tileHeight = 2.0f;
+    float tileHeight = 1.0f;
 
     [SerializeField]
     Vector3 mapLoadStartingPosition = Vector3.zero;
