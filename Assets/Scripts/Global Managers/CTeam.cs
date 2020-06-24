@@ -41,7 +41,7 @@ public class CTeam : MonoBehaviour
         CharacterEvents.actionTakenEvent.RemoveListener(OnCharacterActionTaken);
     }
 
-    void OnCharacterActionTaken(CCharacter character, CCharacter.EActions action)
+    void OnCharacterActionTaken(CCharacter character, ECharacterActions action)
     {
         if(!isTeamsTurn)
         {
@@ -139,7 +139,7 @@ public class CTeam : MonoBehaviour
             return;
         }
 
-        if(currentlySelectedCharacter.CanTakeAction(CCharacter.EActions.MOVE)
+        if(currentlySelectedCharacter.CanTakeAction(ECharacterActions.MOVE)
             && currentlySelectedCharacter.tilesInMovementRange.Contains(tile)
             && !IsAnyCharacterOnTile(tile))
         {

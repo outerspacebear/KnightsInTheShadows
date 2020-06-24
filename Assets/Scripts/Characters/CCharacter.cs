@@ -1,25 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class CCharacter : MonoBehaviour
 {
-    public enum EActions
-    {
-        MOVE
-    }
-
-    public static Dictionary<EActions, int> actionCostMap = new Dictionary<EActions, int>() { { EActions.MOVE, 1 } };
+    public ECharacterActions[] availableActions { get; } = { ECharacterActions.MOVE };
 
     public void ResetActionPoints()
     {
         currentActionPoints = baseActionPoints;
     }
 
-    public bool CanTakeAction(EActions action)
+    public bool CanTakeAction(ECharacterActions action)
     {
-        if(currentActionPoints >= actionCostMap[action])
+        if(!availableActions.Contains(action))
+        {
+            //This character class cannot perform this action
+            return false;
+        }
+
+        if(currentActionPoints >= CharacterActions.actionCostMap[action])
         {
             return true;
         }
@@ -69,7 +71,7 @@ public class CCharacter : MonoBehaviour
         }
 
         Debug.Log("Character " + name + " selected!");
-        CharacterSelectedEvent.Get().Invoke(this);
+        CharacterEvents.characterSelectedEvent.Invoke(this);
     }
 
     public void OnDeselected()
@@ -85,16 +87,17 @@ public class CCharacter : MonoBehaviour
         }
 
         Debug.Log("Character " + name + " de-selected!");
+        CharacterEvents.characterDeselectedEvent.Invoke(this);
     }
 
     public void MoveTo(CTile tile)
     {
         transform.position = tile.transform.position;
         occupyingTile = tile;
-        currentActionPoints -= actionCostMap[EActions.MOVE];
+        currentActionPoints -= CharacterActions.actionCostMap[ECharacterActions.MOVE];
 
         Debug.Log("Character " + name + " moved to " + tile.transform.position.ToString());
-        CharacterEvents.actionTakenEvent.Invoke(this, EActions.MOVE);
+        CharacterEvents.actionTakenEvent.Invoke(this, ECharacterActions.MOVE);
     }
 
     void UpdateTilesWithinMovementRange()
