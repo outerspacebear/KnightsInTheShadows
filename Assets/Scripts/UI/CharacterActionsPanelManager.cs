@@ -9,9 +9,9 @@ public class CharacterActionsPanelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        actionPanel.SetActive(false);
         actionIcons = Resources.LoadAll(actionIconsPath, typeof(Sprite)).Cast<Sprite>().ToArray();
 
+        MapLoadedEvent.Get().AddListener(OnMapLoaded);
         CharacterEvents.characterSelectedEvent.AddListener(OnCharacterSelected);
         CharacterEvents.characterDeselectedEvent.AddListener(OnCharacterDeselected);
     }
@@ -20,6 +20,11 @@ public class CharacterActionsPanelManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void OnMapLoaded(TileMap map)
+    {
+        actionPanel.SetActive(false);
     }
 
     void OnCharacterSelected(CCharacter character)
