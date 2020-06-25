@@ -11,9 +11,24 @@ public class CharacterActionsPanelManager : MonoBehaviour
     {
         actionIcons = Resources.LoadAll(actionIconsPath, typeof(Sprite)).Cast<Sprite>().ToArray();
 
+        actionDescriptionText = actionDescriptionPanel.GetComponentInChildren<Text>();
+        if(!actionDescriptionText)
+        {
+            Debug.LogError("No Text component found in children of action description panel!");
+        }
+
         MapLoadedEvent.Get().AddListener(OnMapLoaded);
         CharacterEvents.characterSelectedEvent.AddListener(OnCharacterSelected);
         CharacterEvents.characterDeselectedEvent.AddListener(OnCharacterDeselected);
+        UIEvents.actionButtonClickedEvent.AddListener(OnActionButtonClicked);
+    }
+
+    private void OnDestroy()
+    {
+        MapLoadedEvent.Get().RemoveListener(OnMapLoaded);
+        CharacterEvents.characterSelectedEvent.RemoveListener(OnCharacterSelected);
+        CharacterEvents.characterDeselectedEvent.RemoveListener(OnCharacterDeselected);
+        UIEvents.actionButtonClickedEvent.RemoveListener(OnActionButtonClicked);
     }
 
     // Update is called once per frame
@@ -25,6 +40,7 @@ public class CharacterActionsPanelManager : MonoBehaviour
     void OnMapLoaded(TileMap map)
     {
         actionPanel.SetActive(false);
+        actionDescriptionPanel.gameObject.SetActive(false);
     }
 
     void OnCharacterSelected(CCharacter character)
@@ -32,11 +48,18 @@ public class CharacterActionsPanelManager : MonoBehaviour
         actionPanel.SetActive(true);
         availableActions = new List<ECharacterActions>(character.availableActions);
         UpdatePanel();
+
+        //Click the first action button by default
+        if(availableActions.Count > 0)
+        {
+            actionButtons[0].GetComponent<Button>().onClick.Invoke();
+        }
     }
 
     void OnCharacterDeselected(CCharacter character)
     {
         actionPanel.SetActive(false);
+        actionDescriptionPanel.gameObject.SetActive(false);
         availableActions = null;
         ResetAllButtons();
     }
@@ -86,8 +109,19 @@ public class CharacterActionsPanelManager : MonoBehaviour
         }
     }
 
+    void OnActionButtonClicked(ECharacterActions action)
+    {
+        //Show description text
+        string description = CharacterActions.actionDescriptionMap[action];
+        actionDescriptionText.text = description;
+        actionDescriptionPanel.gameObject.SetActive(true);
+    }
+
     [SerializeField]
     GameObject actionPanel;
+    [SerializeField]
+    GameObject actionDescriptionPanel;
+    Text actionDescriptionText;
     [SerializeField]
     List<CCharacterActionButton> actionButtons;
 

@@ -16,6 +16,8 @@ public class CTeam : MonoBehaviour
         currentlySelectedCharacter = null;
 
         TrySelectNextAvailableCharacter();
+
+        TeamEvents.teamTurnStartedEvent.Invoke(this);
     }
 
     public void OnEndTurn()
@@ -26,18 +28,29 @@ public class CTeam : MonoBehaviour
         isTeamsTurn = false;
     }
 
+    public bool IsAnyCharacterOnTile(CTile tile)
+    {
+        foreach (var character in characters)
+        {
+            if (character.occupyingTile == tile)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         CharacterClickedOnEvent.Get().AddListener(OnCharacterClickedOn);
-        TileClickedOnEvent.Get().AddListener(OnTileClickedOn);
         CharacterEvents.actionTakenEvent.AddListener(OnCharacterActionTaken);
     }
 
     ~CTeam()
     {
         CharacterClickedOnEvent.Get().RemoveListener(OnCharacterClickedOn);
-        TileClickedOnEvent.Get().RemoveListener(OnTileClickedOn);
         CharacterEvents.actionTakenEvent.RemoveListener(OnCharacterActionTaken);
     }
 
@@ -130,34 +143,6 @@ public class CTeam : MonoBehaviour
 
         currentlySelectedCharacter = character;
         currentlySelectedCharacter.OnSelected();
-    }
-
-    void OnTileClickedOn(CTile tile)
-    {
-        if(!isTeamsTurn)
-        {
-            return;
-        }
-
-        if(currentlySelectedCharacter.CanTakeAction(ECharacterActions.MOVE)
-            && currentlySelectedCharacter.tilesInMovementRange.Contains(tile)
-            && !IsAnyCharacterOnTile(tile))
-        {
-            currentlySelectedCharacter.MoveTo(tile);
-        }
-    }
-
-    bool IsAnyCharacterOnTile(CTile tile)
-    {
-        foreach(var character in characters)
-        {
-            if(character.occupyingTile == tile)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     [SerializeField]

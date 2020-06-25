@@ -63,13 +63,6 @@ public class CCharacter : MonoBehaviour
             playerHighlilghter.transform.position = gameObject.transform.position;
         }
 
-        UpdateTilesWithinMovementRange();
-
-        foreach (var tile in tilesInMovementRange)
-        {
-            tile.EnableMovementRangeHighlight(tileHighlightColor);
-        }
-
         Debug.Log("Character " + name + " selected!");
         CharacterEvents.characterSelectedEvent.Invoke(this);
     }
@@ -79,11 +72,6 @@ public class CCharacter : MonoBehaviour
         if (playerHighlilghter)
         {
             playerHighlilghter.transform.position = playerHighlighterDefaultPosition;
-        }
-
-        foreach (var tile in tilesInMovementRange)
-        {
-            tile.DisableMovementRangeHighlight();
         }
 
         Debug.Log("Character " + name + " de-selected!");
@@ -100,19 +88,10 @@ public class CCharacter : MonoBehaviour
         CharacterEvents.actionTakenEvent.Invoke(this, ECharacterActions.MOVE);
     }
 
-    void UpdateTilesWithinMovementRange()
-    {
-        tilesInMovementRange.Clear();
-        tilesInMovementRange = TileMapTools.GetTilesWithinMovementRange(map, occupyingTile, movementPerAction);
-    }
+    public int GetMovementPerAction() => movementPerAction;
 
     void OnMapLoaded(TileMap map)
     {
-        if (CCharacter.map == null)
-        {
-            CCharacter.map = map;
-        }
-
         transform.position = startingPosition;
 
         occupyingTile = null;
@@ -125,12 +104,11 @@ public class CCharacter : MonoBehaviour
 
     public int currentActionPoints { get; set; }
     public CTile occupyingTile { get; set; }
-    public List<CTile> tilesInMovementRange { get; private set; } = new List<CTile>();
     [SerializeField]
-    Color tileHighlightColor = Color.cyan;
+    public Color tileHighlightColor = Color.cyan;
 
     [SerializeField]
-    private int movementPerAction;
+    int movementPerAction;
     [SerializeField]
     private int baseActionPoints;
     [SerializeField]
@@ -138,5 +116,4 @@ public class CCharacter : MonoBehaviour
 
     static GameObject playerHighlilghter;
     static Vector3 playerHighlighterDefaultPosition;
-    static TileMap map;
 }
