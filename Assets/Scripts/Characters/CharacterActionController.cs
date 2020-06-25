@@ -12,7 +12,6 @@ public class CharacterActionController : MonoBehaviour
         CharacterEvents.characterSelectedEvent.AddListener(OnCharacterSelected);
         CharacterEvents.characterDeselectedEvent.AddListener(Cleanup);
         TileEvents.tileClickedOnEvent.AddListener(OnTileClickedOn);
-        TeamEvents.teamTurnStartedEvent.AddListener(OnTeamSelected);
     }
 
     private void OnDestroy()
@@ -22,7 +21,6 @@ public class CharacterActionController : MonoBehaviour
         CharacterEvents.characterSelectedEvent.RemoveListener(OnCharacterSelected);
         CharacterEvents.characterDeselectedEvent.RemoveListener(Cleanup);
         TileEvents.tileClickedOnEvent.RemoveListener(OnTileClickedOn);
-        TeamEvents.teamTurnStartedEvent.RemoveListener(OnTeamSelected);
     }
 
     // Update is called once per frame
@@ -63,8 +61,6 @@ public class CharacterActionController : MonoBehaviour
     }
 
     void OnCharacterSelected(CCharacter character) => currentlySelectedCharacter = character;
-
-    void OnTeamSelected(CTeam team) => currentlySelectedTeam = team;
 
     void Cleanup(CCharacter deselectedCharacter = null)
     {
@@ -109,7 +105,6 @@ public class CharacterActionController : MonoBehaviour
     ECharacterActions currentlySelectedAction;
     TileMap map;
     CCharacter currentlySelectedCharacter;
-    CTeam currentlySelectedTeam;
     List<CTeam> allTeams;
 
     List<CTile> tilesInRange = new List<CTile>();

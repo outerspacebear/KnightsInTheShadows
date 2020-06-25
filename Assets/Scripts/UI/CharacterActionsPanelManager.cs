@@ -34,7 +34,50 @@ public class CharacterActionsPanelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            TryClickActionButton(0);
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            TryClickActionButton(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            TryClickActionButton(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            TryClickActionButton(3);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            TryClickActionButton(4);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            TryClickActionButton(5);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            TryClickActionButton(6);
+        }
+    }
 
+    void TryClickActionButton(int index)
+    {
+        if (availableActions != null && availableActions.Count > index)
+        {
+            Button button = actionButtons[index].GetComponent<Button>();
+            if(button == null)
+            {
+                Debug.LogError("No button component found on object with action button script!");
+                return;
+            }
+
+            button.Select();
+            button.onClick.Invoke();
+        }
     }
 
     void OnMapLoaded(TileMap map)
@@ -50,10 +93,7 @@ public class CharacterActionsPanelManager : MonoBehaviour
         UpdatePanel();
 
         //Click the first action button by default
-        if(availableActions.Count > 0)
-        {
-            actionButtons[0].GetComponent<Button>().onClick.Invoke();
-        }
+        TryClickActionButton(0);
     }
 
     void OnCharacterDeselected(CCharacter character)

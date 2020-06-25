@@ -23,7 +23,7 @@ public class LevelManager : MonoBehaviour
         TeamEvents.teamTurnEndedEvent.RemoveListener(OnTeamTurnEnded);
     }
 
-    void StartLevel()
+    public void StartLevel()
     {
         if (hasLevelStarted || !TryLoadLevel())
         {
@@ -44,10 +44,7 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!hasLevelStarted && Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            StartLevel();
-        }
+
     }
 
     bool TryLoadLevel()
