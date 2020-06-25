@@ -56,7 +56,11 @@ public class CharacterActionController : MonoBehaviour
         }
     }
 
-    void OnMapLoaded(TileMap map) => this.map = map;
+    void OnMapLoaded(TileMap map)
+    {
+        this.map = map;
+        allTeams = levelManager.GetAllTeams();
+    }
 
     void OnCharacterSelected(CCharacter character) => currentlySelectedCharacter = character;
 
@@ -77,7 +81,7 @@ public class CharacterActionController : MonoBehaviour
             case ECharacterActions.MOVE:
                 if (currentlySelectedCharacter.CanTakeAction(ECharacterActions.MOVE)
                     && tilesInRange.Contains(tile)
-                    && !currentlySelectedTeam.IsAnyCharacterOnTile(tile))
+                    && !IsTileOccupied(tile))
                 {
                     currentlySelectedCharacter.MoveTo(tile);
                 }
@@ -89,11 +93,27 @@ public class CharacterActionController : MonoBehaviour
         
     }
 
+    bool IsTileOccupied(CTile tile)
+    {
+        foreach(var team in allTeams)
+        {
+            if(team.IsAnyCharacterOnTile(tile))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     ECharacterActions currentlySelectedAction;
     TileMap map;
     CCharacter currentlySelectedCharacter;
     CTeam currentlySelectedTeam;
+    List<CTeam> allTeams;
 
     List<CTile> tilesInRange = new List<CTile>();
 
+    [SerializeField]
+    LevelManager levelManager;
 }

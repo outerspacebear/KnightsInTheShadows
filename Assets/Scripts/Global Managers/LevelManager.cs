@@ -7,9 +7,9 @@ using System.Security.Cryptography;
 
 public class LevelManager : MonoBehaviour
 {
-    public TileMap GetMap()
+    public List<CTeam> GetAllTeams()
     {
-        return map;
+        return teams;
     }
 
     // Start is called before the first frame update
@@ -18,7 +18,7 @@ public class LevelManager : MonoBehaviour
         TeamEvents.teamTurnEndedEvent.AddListener(OnTeamTurnEnded);
     }
 
-    ~LevelManager()
+    void OnDestroy()
     {
         TeamEvents.teamTurnEndedEvent.RemoveListener(OnTeamTurnEnded);
     }
