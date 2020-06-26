@@ -93,7 +93,7 @@ public class CharacterActionsPanelManager : MonoBehaviour
         UpdatePanel();
 
         //Click the first action button by default
-        TryClickActionButton(0);
+        //TryClickActionButton(0);
     }
 
     void OnCharacterDeselected(CCharacter character)
