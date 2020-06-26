@@ -12,7 +12,7 @@ public class TextAdder : MonoBehaviour
         textComponent = GetComponent<Text>();
         originalText = textComponent.text;
 
-        InvokeRepeating("AddText", 0.3f, 0.2f);
+        InvokeRepeating("AddText", 0.3f, 0.3f);
     }
 
     // Update is called once per frame
