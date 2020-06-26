@@ -16,6 +16,7 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         TeamEvents.teamTurnEndedEvent.AddListener(OnTeamTurnEnded);
+        Invoke("StartLevel", 1);
     }
 
     void OnDestroy()
@@ -31,6 +32,11 @@ public class LevelManager : MonoBehaviour
         }
         MapLoadedEvent.Get().Invoke(map);
         Debug.Log("Map loaded successfully!");
+
+        if(loadingScreen)
+        {
+            loadingScreen.SetActive(false);
+        }
 
         if (teams.Count == 0)
         {
@@ -120,4 +126,7 @@ public class LevelManager : MonoBehaviour
     TileMap map;
 
     bool hasLevelStarted = false;
+
+    [SerializeField]
+    GameObject loadingScreen;
 }
