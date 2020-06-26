@@ -17,6 +17,9 @@ public class CharacterActionsPanelManager : MonoBehaviour
             Debug.LogError("No Text component found in children of action description panel!");
         }
 
+        int autoSelectIntValue = PlayerPrefs.GetInt("autoSelectFirstAction", 0);
+        shouldAutoSelectFirstAction = autoSelectIntValue == 1 ? true : false;
+
         MapLoadedEvent.Get().AddListener(OnMapLoaded);
         CharacterEvents.characterSelectedEvent.AddListener(OnCharacterSelected);
         CharacterEvents.characterDeselectedEvent.AddListener(OnCharacterDeselected);
@@ -92,8 +95,10 @@ public class CharacterActionsPanelManager : MonoBehaviour
         availableActions = new List<ECharacterActions>(character.availableActions);
         UpdatePanel();
 
-        //Click the first action button by default
-        //TryClickActionButton(0);
+        if(shouldAutoSelectFirstAction)
+        {
+            TryClickActionButton(0);
+        }
     }
 
     void OnCharacterDeselected(CCharacter character)
@@ -171,4 +176,7 @@ public class CharacterActionsPanelManager : MonoBehaviour
     Dictionary<ECharacterActions, string> actionIconPrefabNames = 
         new Dictionary<ECharacterActions, string>{ { ECharacterActions.MOVE, "Move" } };
     Sprite[] actionIcons;
+
+    //PlayerPrefs
+    bool shouldAutoSelectFirstAction = false;
 }
