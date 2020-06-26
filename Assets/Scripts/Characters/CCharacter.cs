@@ -1,25 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class CCharacter : MonoBehaviour
 {
-    public enum EActions
-    {
-        MOVE
-    }
-
-    public static Dictionary<EActions, int> actionCostMap = new Dictionary<EActions, int>() { { EActions.MOVE, 1 } };
+    public ECharacterActions[] availableActions { get; } = { ECharacterActions.MOVE };
 
     public void ResetActionPoints()
     {
         currentActionPoints = baseActionPoints;
     }
 
-    public bool CanTakeAction(EActions action)
+    public bool CanTakeAction(ECharacterActions action)
     {
-        if(currentActionPoints >= actionCostMap[action])
+        if(!availableActions.Contains(action))
+        {
+            //This character class cannot perform this action
+            return false;
+        }
+
+        if(currentActionPoints >= CharacterActions.actionCostMap[action])
         {
             return true;
         }
@@ -61,15 +63,8 @@ public class CCharacter : MonoBehaviour
             playerHighlilghter.transform.position = gameObject.transform.position;
         }
 
-        UpdateTilesWithinMovementRange();
-
-        foreach (var tile in tilesInMovementRange)
-        {
-            tile.EnableMovementRangeHighlight(tileHighlightColor);
-        }
-
         Debug.Log("Character " + name + " selected!");
-        CharacterSelectedEvent.Get().Invoke(this);
+        CharacterEvents.characterSelectedEvent.Invoke(this);
     }
 
     public void OnDeselected()
@@ -79,37 +74,24 @@ public class CCharacter : MonoBehaviour
             playerHighlilghter.transform.position = playerHighlighterDefaultPosition;
         }
 
-        foreach (var tile in tilesInMovementRange)
-        {
-            tile.DisableMovementRangeHighlight();
-        }
-
         Debug.Log("Character " + name + " de-selected!");
+        CharacterEvents.characterDeselectedEvent.Invoke(this);
     }
 
     public void MoveTo(CTile tile)
     {
         transform.position = tile.transform.position;
         occupyingTile = tile;
-        currentActionPoints -= actionCostMap[EActions.MOVE];
+        currentActionPoints -= CharacterActions.actionCostMap[ECharacterActions.MOVE];
 
         Debug.Log("Character " + name + " moved to " + tile.transform.position.ToString());
-        CharacterEvents.actionTakenEvent.Invoke(this, EActions.MOVE);
+        CharacterEvents.actionTakenEvent.Invoke(this, ECharacterActions.MOVE);
     }
 
-    void UpdateTilesWithinMovementRange()
-    {
-        tilesInMovementRange.Clear();
-        tilesInMovementRange = TileMapTools.GetTilesWithinMovementRange(map, occupyingTile, movementPerAction);
-    }
+    public int GetMovementPerAction() => movementPerAction;
 
     void OnMapLoaded(TileMap map)
     {
-        if (CCharacter.map == null)
-        {
-            CCharacter.map = map;
-        }
-
         transform.position = startingPosition;
 
         occupyingTile = null;
@@ -122,12 +104,11 @@ public class CCharacter : MonoBehaviour
 
     public int currentActionPoints { get; set; }
     public CTile occupyingTile { get; set; }
-    public List<CTile> tilesInMovementRange { get; private set; } = new List<CTile>();
     [SerializeField]
-    Color tileHighlightColor = Color.cyan;
+    public Color tileHighlightColor = Color.cyan;
 
     [SerializeField]
-    private int movementPerAction;
+    int movementPerAction;
     [SerializeField]
     private int baseActionPoints;
     [SerializeField]
@@ -135,5 +116,4 @@ public class CCharacter : MonoBehaviour
 
     static GameObject playerHighlilghter;
     static Vector3 playerHighlighterDefaultPosition;
-    static TileMap map;
 }

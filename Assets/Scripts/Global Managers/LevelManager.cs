@@ -7,23 +7,24 @@ using System.Security.Cryptography;
 
 public class LevelManager : MonoBehaviour
 {
-    public TileMap GetMap()
+    public List<CTeam> GetAllTeams()
     {
-        return map;
+        return teams;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         TeamEvents.teamTurnEndedEvent.AddListener(OnTeamTurnEnded);
+        Invoke("StartLevel", 1);
     }
 
-    ~LevelManager()
+    void OnDestroy()
     {
         TeamEvents.teamTurnEndedEvent.RemoveListener(OnTeamTurnEnded);
     }
 
-    void StartLevel()
+    public void StartLevel()
     {
         if (hasLevelStarted || !TryLoadLevel())
         {
@@ -31,6 +32,11 @@ public class LevelManager : MonoBehaviour
         }
         MapLoadedEvent.Get().Invoke(map);
         Debug.Log("Map loaded successfully!");
+
+        if(loadingScreen)
+        {
+            loadingScreen.SetActive(false);
+        }
 
         if (teams.Count == 0)
         {
@@ -44,10 +50,7 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!hasLevelStarted && Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            StartLevel();
-        }
+
     }
 
     bool TryLoadLevel()
@@ -123,4 +126,7 @@ public class LevelManager : MonoBehaviour
     TileMap map;
 
     bool hasLevelStarted = false;
+
+    [SerializeField]
+    GameObject loadingScreen;
 }

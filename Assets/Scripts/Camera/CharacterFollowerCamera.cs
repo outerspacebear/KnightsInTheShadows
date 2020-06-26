@@ -9,7 +9,7 @@ public class CharacterFollowerCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CharacterSelectedEvent.Get().AddListener(FocusOnCharacter);
+        CharacterEvents.characterSelectedEvent.AddListener(FocusOnCharacter);
     }
 
     // Update is called once per frame
