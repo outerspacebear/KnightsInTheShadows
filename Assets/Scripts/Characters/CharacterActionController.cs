@@ -12,6 +12,8 @@ public class CharacterActionController : MonoBehaviour
         CharacterEvents.characterSelectedEvent.AddListener(OnCharacterSelected);
         CharacterEvents.characterDeselectedEvent.AddListener(Cleanup);
         TileEvents.tileClickedOnEvent.AddListener(OnTileClickedOn);
+        TeamEvents.teamTurnStartedEvent.AddListener(OnTeamTurnStarted);
+        CharacterEvents.characterRightClickedEvent.AddListener(OnCharacterRightClickedOn);
     }
 
     private void OnDestroy()
@@ -21,6 +23,8 @@ public class CharacterActionController : MonoBehaviour
         CharacterEvents.characterSelectedEvent.RemoveListener(OnCharacterSelected);
         CharacterEvents.characterDeselectedEvent.RemoveListener(Cleanup);
         TileEvents.tileClickedOnEvent.RemoveListener(OnTileClickedOn);
+        TeamEvents.teamTurnStartedEvent.RemoveListener(OnTeamTurnStarted);
+        CharacterEvents.characterRightClickedEvent.RemoveListener(OnCharacterRightClickedOn);
     }
 
     // Update is called once per frame
@@ -29,14 +33,17 @@ public class CharacterActionController : MonoBehaviour
         
     }
 
-    void OnActionButtonClicked(ECharacterActions action)
+    void OnActionButtonClicked(ECharacterAction action)
     {
         Cleanup();
         currentlySelectedAction = action;
         switch(action)
         {
-            case ECharacterActions.MOVE:
+            case ECharacterAction.MOVE:
                 OnMoveButtonClicked();
+                break;
+            case ECharacterAction.ATTACK:
+                OnAttackButtonClicked();
                 break;
             default:
                 Debug.LogError("Action " + action.ToString() + " not covered in switch case! Nothing will happen when you click on the button!");
@@ -50,7 +57,23 @@ public class CharacterActionController : MonoBehaviour
             , currentlySelectedCharacter.GetMovementPerAction());
         foreach (var tile in tilesInRange)
         {
-            tile.EnableMovementRangeHighlight(currentlySelectedCharacter.tileHighlightColor);
+            if(!IsAnyCharacterOnTile(tile))
+            {
+                tile.EnableMovementRangeHighlight(currentlySelectedCharacter.tileHighlightColor);
+            }
+        }
+    }
+
+    void OnAttackButtonClicked()
+    {
+        tilesInRange = TileMapTools.GetTilesWithinMovementRange(map, currentlySelectedCharacter.occupyingTile
+            , currentlySelectedCharacter.GetAttackRange());
+        foreach(var tile in tilesInRange)
+        {
+            if(IsEnemyCharacterOnTile(tile))
+            {
+                tile.EnableMovementRangeHighlight(currentlySelectedCharacter.tileHighlightColor);
+            }
         }
     }
 
@@ -61,6 +84,8 @@ public class CharacterActionController : MonoBehaviour
     }
 
     void OnCharacterSelected(CCharacter character) => currentlySelectedCharacter = character;
+
+    void OnTeamTurnStarted(CTeam team) => currentlySelectedTeam = team;
 
     void Cleanup(CCharacter deselectedCharacter = null)
     {
@@ -74,10 +99,10 @@ public class CharacterActionController : MonoBehaviour
     {
         switch(currentlySelectedAction)
         {
-            case ECharacterActions.MOVE:
-                if (currentlySelectedCharacter.CanTakeAction(ECharacterActions.MOVE)
+            case ECharacterAction.MOVE:
+                if (currentlySelectedCharacter.CanTakeAction(ECharacterAction.MOVE)
                     && tilesInRange.Contains(tile)
-                    && !IsTileOccupied(tile))
+                    && !IsAnyCharacterOnTile(tile))
                 {
                     currentlySelectedCharacter.MoveTo(tile);
                 }
@@ -89,7 +114,22 @@ public class CharacterActionController : MonoBehaviour
         
     }
 
-    bool IsTileOccupied(CTile tile)
+    void OnCharacterRightClickedOn(CCharacter character)
+    {
+        switch(currentlySelectedAction)
+        {
+            case ECharacterAction.ATTACK:
+                if (currentlySelectedCharacter.CanTakeAction(ECharacterAction.ATTACK)
+                    && tilesInRange.Contains(character.occupyingTile)
+                    && IsEnemyCharacterOnTile(character.occupyingTile))
+                {
+                    currentlySelectedCharacter.Attack(character);
+                }
+                break;
+        }
+    }
+
+    bool IsAnyCharacterOnTile(CTile tile)
     {
         foreach(var team in allTeams)
         {
@@ -102,10 +142,44 @@ public class CharacterActionController : MonoBehaviour
         return false;
     }
 
-    ECharacterActions currentlySelectedAction;
+    //Enemy refers to any team other than thecurrently selected one
+    bool IsEnemyCharacterOnTile(CTile tile)
+    {
+        foreach (var team in allTeams)
+        {
+            if(team == currentlySelectedTeam)
+            {
+                continue;
+            }
+
+            if (team.IsAnyCharacterOnTile(tile))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    CCharacter GetCharacterOnTile(CTile tile)
+    {
+        foreach (var team in allTeams)
+        {
+            CCharacter character = team.GetCharacterOnTile(tile);
+            if (character != null)
+            {
+                return character;
+            }
+        }
+
+        return null;
+    }
+
+    ECharacterAction currentlySelectedAction;
     TileMap map;
     CCharacter currentlySelectedCharacter;
     List<CTeam> allTeams;
+    CTeam currentlySelectedTeam;
 
     List<CTile> tilesInRange = new List<CTile>();
 

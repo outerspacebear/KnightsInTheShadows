@@ -11,7 +11,7 @@ public class CCharacterActionButton : MonoBehaviour
         UIEvents.actionButtonClickedEvent.Invoke(action);
     }
 
-    public void SetAction(ECharacterActions action, Sprite iconImage)
+    public void SetAction(ECharacterAction action, Sprite iconImage)
     {
         this.action = action;
         iconImageComponent.sprite = iconImage;
@@ -41,7 +41,7 @@ public class CCharacterActionButton : MonoBehaviour
         ResetButton();
     }
 
-    ECharacterActions action { get; set; }
+    ECharacterAction action { get; set; }
     Image iconImageComponent;
     Button buttonComponent;
 }
