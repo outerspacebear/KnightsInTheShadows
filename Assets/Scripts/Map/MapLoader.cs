@@ -24,8 +24,6 @@ public class MapLoader
         TileMap.Map loadedMap = new TileMap.Map();
         loadedMap.rows = new List<TileMap.Row>();
 
-        spawnIdCounter = 0;
-
         XDocument xFile = XDocument.Load(sourceFile);
         if(xFile == null)
         {
@@ -182,6 +180,4 @@ public class MapLoader
     GameObject[] tilePrefabs;
     Transform parentTransform;
     GameObject baseGroundPrefab;
-
-    static int spawnIdCounter;
 }
