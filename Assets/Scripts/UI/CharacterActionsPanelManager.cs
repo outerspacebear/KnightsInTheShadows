@@ -92,7 +92,7 @@ public class CharacterActionsPanelManager : MonoBehaviour
     void OnCharacterSelected(CCharacter character)
     {
         actionPanel.SetActive(true);
-        availableActions = new List<ECharacterActions>(character.availableActions);
+        availableActions = new List<ECharacterAction>(character.availableActions);
         UpdatePanel();
 
         if(shouldAutoSelectFirstAction)
@@ -132,7 +132,7 @@ public class CharacterActionsPanelManager : MonoBehaviour
         }
     }
 
-    Sprite GetActionIcon(ECharacterActions action)
+    Sprite GetActionIcon(ECharacterAction action)
     {
         string actionIconName = actionIconPrefabNames[action];
         foreach(var iconPrefab in actionIcons)
@@ -154,12 +154,17 @@ public class CharacterActionsPanelManager : MonoBehaviour
         }
     }
 
-    void OnActionButtonClicked(ECharacterActions action)
+    void OnActionButtonClicked(ECharacterAction action)
     {
         //Show description text
         string description = CharacterActions.actionDescriptionMap[action];
         actionDescriptionText.text = description;
         actionDescriptionPanel.gameObject.SetActive(true);
+    }
+
+    void OnCharacterActionTaken(CCharacter character, ECharacterAction action)
+    {
+        
     }
 
     [SerializeField]
@@ -170,11 +175,13 @@ public class CharacterActionsPanelManager : MonoBehaviour
     [SerializeField]
     List<CCharacterActionButton> actionButtons;
 
-    List<ECharacterActions> availableActions;
+    List<ECharacterAction> availableActions;
 
     const string actionIconsPath = "Prefabs/UI/Actions";
-    Dictionary<ECharacterActions, string> actionIconPrefabNames = 
-        new Dictionary<ECharacterActions, string>{ { ECharacterActions.MOVE, "Move" } };
+    Dictionary<ECharacterAction, string> actionIconPrefabNames = 
+        new Dictionary<ECharacterAction, string>{
+            { ECharacterAction.MOVE, "Move" },
+            {ECharacterAction.ATTACK, "Attack" }};
     Sprite[] actionIcons;
 
     //PlayerPrefs

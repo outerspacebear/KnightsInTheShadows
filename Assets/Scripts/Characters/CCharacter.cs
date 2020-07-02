@@ -1,19 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class CCharacter : MonoBehaviour
 {
-    public ECharacterActions[] availableActions { get; } = { ECharacterActions.MOVE };
+    public ECharacterAction[] availableActions { get; } = { ECharacterAction.MOVE, ECharacterAction.ATTACK };
 
     public void ResetActionPoints()
     {
         currentActionPoints = baseActionPoints;
     }
 
-    public bool CanTakeAction(ECharacterActions action)
+    public bool CanTakeAction(ECharacterAction action)
     {
         if(!availableActions.Contains(action))
         {
@@ -47,13 +48,22 @@ public class CCharacter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     private void OnMouseDown()
     {
         Debug.Log("Character " + gameObject.name + "clicked on!");
         CharacterClickedOnEvent.Get().Invoke(this);
+    }
+
+    private void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Debug.Log("Character " + name + " right-clicked on!");
+            CharacterEvents.characterRightClickedEvent.Invoke(this);
+        }
     }
 
     public void OnSelected()
@@ -82,13 +92,38 @@ public class CCharacter : MonoBehaviour
     {
         transform.position = tile.transform.position;
         occupyingTile = tile;
-        currentActionPoints -= CharacterActions.actionCostMap[ECharacterActions.MOVE];
+        currentActionPoints -= CharacterActions.actionCostMap[ECharacterAction.MOVE];
 
         Debug.Log("Character " + name + " moved to " + tile.transform.position.ToString());
-        CharacterEvents.actionTakenEvent.Invoke(this, ECharacterActions.MOVE);
+        CharacterEvents.actionTakenEvent.Invoke(this, ECharacterAction.MOVE);
+    }
+
+    public void Attack(CCharacter character)
+    {
+        Debug.Log("Character " + name + " is attacking character " + character.name + "!");
+        currentActionPoints -= CharacterActions.actionCostMap[ECharacterAction.MOVE];
+
+        character.OnAttacked(attackDamage);
+        CharacterEvents.actionTakenEvent.Invoke(this, ECharacterAction.ATTACK);
+    }
+
+    public void OnAttacked(int damage)
+    {
+        Debug.Log("Character " + name + " attacked for " + damage.ToString() + " damage!");
+        CharacterEvents.characterAttackedEvent.Invoke(this);
+
+        hitPoints -= damage;
+        if(hitPoints <= 0)
+        {
+            CharacterEvents.characterDeathEvent.Invoke(this);
+        }
     }
 
     public int GetMovementPerAction() => movementPerAction;
+
+    public int GetAttackRange() => attackRange;
+
+    public int GetHitPoints() => hitPoints;
 
     void OnMapLoaded(TileMap map)
     {
@@ -111,6 +146,12 @@ public class CCharacter : MonoBehaviour
     int movementPerAction;
     [SerializeField]
     private int baseActionPoints;
+    [SerializeField]
+    int attackRange = 1;
+    [SerializeField]
+    int attackDamage = 1;
+    [SerializeField]
+    int hitPoints;
     [SerializeField]
     Vector3 startingPosition;
 

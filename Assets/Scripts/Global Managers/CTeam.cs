@@ -15,7 +15,10 @@ public class CTeam : MonoBehaviour
         }
         currentlySelectedCharacter = null;
 
-        TrySelectNextAvailableCharacter();
+        if(!TrySelectNextAvailableCharacter())
+        {
+            shouldEndTurnNextUpdate = true;
+        }
 
         TeamEvents.teamTurnStartedEvent.Invoke(this);
     }
@@ -23,7 +26,10 @@ public class CTeam : MonoBehaviour
     public void OnEndTurn()
     {
         Debug.Log("Ending turn for team " + name);
-        currentlySelectedCharacter.OnDeselected();
+        if(currentlySelectedCharacter)
+        {
+            currentlySelectedCharacter.OnDeselected();
+        }
 
         isTeamsTurn = false;
     }
@@ -41,20 +47,35 @@ public class CTeam : MonoBehaviour
         return false;
     }
 
+    public CCharacter GetCharacterOnTile(CTile tile)
+    {
+        foreach (var character in characters)
+        {
+            if (character.occupyingTile == tile)
+            {
+                return character;
+            }
+        }
+
+        return null;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         CharacterClickedOnEvent.Get().AddListener(OnCharacterClickedOn);
         CharacterEvents.actionTakenEvent.AddListener(OnCharacterActionTaken);
+        CharacterEvents.characterDeathEvent.AddListener(OnCharacterDeath);
     }
 
     ~CTeam()
     {
         CharacterClickedOnEvent.Get().RemoveListener(OnCharacterClickedOn);
         CharacterEvents.actionTakenEvent.RemoveListener(OnCharacterActionTaken);
+        CharacterEvents.characterDeathEvent.RemoveListener(OnCharacterDeath);
     }
 
-    void OnCharacterActionTaken(CCharacter character, ECharacterActions action)
+    void OnCharacterActionTaken(CCharacter character, ECharacterAction action)
     {
         if(!isTeamsTurn)
         {
@@ -72,7 +93,7 @@ public class CTeam : MonoBehaviour
 
         if (HaveAllCharactersEndedTurn())
         {
-            TeamEvents.teamTurnEndedEvent.Invoke(this);
+            shouldEndTurnNextUpdate = true;
             return;
         }
 
@@ -87,9 +108,15 @@ public class CTeam : MonoBehaviour
             return;
         }
 
-        if(Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             TrySelectNextAvailableCharacter();
+        }
+
+        if (shouldEndTurnNextUpdate)
+        {
+            TeamEvents.teamTurnEndedEvent.Invoke(this);
+            shouldEndTurnNextUpdate = false;
         }
     }
 
@@ -119,8 +146,28 @@ public class CTeam : MonoBehaviour
         }
     }
 
+    void OnCharacterDeath(CCharacter character)
+    {
+        if(characters.Contains(character))
+        {
+            CharacterEvents.characterDeselectedEvent.Invoke(character);
+            characters.Remove(character);
+            if(currentlySelectedCharacter == character)
+            {
+                currentlySelectedCharacter = null;
+            }
+            Debug.Log("Character " + character.name + " is dead!");
+            Destroy(character.gameObject);
+        }
+    }
+
     bool TrySelectNextAvailableCharacter()
     {
+        if(!isTeamsTurn)
+        {
+            return false;
+        }
+
         Debug.Log("Trying to select next available character!");
         foreach (var character in characters)
         {
@@ -131,11 +178,17 @@ public class CTeam : MonoBehaviour
             }
         }
 
+        Debug.Log("No available character found!");
         return false;
     }
 
     void SelectCharacter(CCharacter character)
     {
+        if(!isTeamsTurn)
+        {
+            return;
+        }
+
         if(currentlySelectedCharacter)
         {
             currentlySelectedCharacter.OnDeselected();
@@ -150,4 +203,5 @@ public class CTeam : MonoBehaviour
     CCharacter currentlySelectedCharacter;
 
     bool isTeamsTurn = false;
+    bool shouldEndTurnNextUpdate = false;
 }

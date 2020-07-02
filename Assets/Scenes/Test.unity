@@ -1099,6 +1099,9 @@ MonoBehaviour:
   tileHighlightColor: {r: 0, g: 1, b: 1, a: 1}
   movementPerAction: 2
   baseActionPoints: 2
+  attackRange: 2
+  attackDamage: 1
+  hitPoints: 5
   startingPosition: {x: 1, y: 0, z: 1}
 --- !u!65 &653309569
 BoxCollider:
@@ -1420,6 +1423,9 @@ MonoBehaviour:
   tileHighlightColor: {r: 0, g: 1, b: 1, a: 1}
   movementPerAction: 3
   baseActionPoints: 2
+  attackRange: 0
+  attackDamage: 1
+  hitPoints: 0
   startingPosition: {x: 3, y: 0, z: 3}
 --- !u!65 &913040335
 BoxCollider:
@@ -1575,7 +1581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
+  m_sendNavigationEvents: 0
   m_DragThreshold: 10
 --- !u!4 &1090259397
 Transform:
@@ -2871,6 +2877,9 @@ MonoBehaviour:
   tileHighlightColor: {r: 1, g: 0.0670706, b: 0, a: 1}
   movementPerAction: 2
   baseActionPoints: 2
+  attackRange: 0
+  attackDamage: 1
+  hitPoints: 0
   startingPosition: {x: 1, y: 0, z: 5}
 --- !u!65 &2134416996
 BoxCollider:
