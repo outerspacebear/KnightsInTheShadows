@@ -27,7 +27,10 @@ public class CAITeam : TeamBase
     // Start is called before the first frame update
     void Start()
     {
-        
+        if(!AreAllCharactersAI())
+        {
+            Debug.LogError("All characters assigned to AI Team " + name + " are not AI characters!");
+        }
     }
 
     // Update is called once per frame
@@ -40,5 +43,18 @@ public class CAITeam : TeamBase
         }
     }
 
-    bool shouldEndTurnNextUpdate { get; set; } = false;
+    bool AreAllCharactersAI()
+    {
+        foreach(var character in characters)
+        {
+            if(!(character is CAICharacter))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool shouldEndTurnNextUpdate = false;
 }
