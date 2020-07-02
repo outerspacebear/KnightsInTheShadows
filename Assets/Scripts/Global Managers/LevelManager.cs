@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 public class LevelManager : MonoBehaviour
 {
-    public List<CTeam> GetAllTeams()
+    public List<TeamBase> GetAllTeams()
     {
         return teams;
     }
@@ -103,7 +103,7 @@ public class LevelManager : MonoBehaviour
     }
 
     [SerializeField]
-    List<CTeam> teams;
+    List<TeamBase> teams;
     int currentTeamIndex = 0;
 
     //Loading the level

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CTeam : MonoBehaviour
+public class CTeam : TeamBase
 {
-    public void BeginTurn()
+    public override void BeginTurn()
     {
         Debug.Log("Beginning turn for team " + name);
 
@@ -23,7 +23,7 @@ public class CTeam : MonoBehaviour
         TeamEvents.teamTurnStartedEvent.Invoke(this);
     }
 
-    public void OnEndTurn()
+    public override void OnEndTurn()
     {
         Debug.Log("Ending turn for team " + name);
         if(currentlySelectedCharacter)
@@ -32,32 +32,6 @@ public class CTeam : MonoBehaviour
         }
 
         isTeamsTurn = false;
-    }
-
-    public bool IsAnyCharacterOnTile(CTile tile)
-    {
-        foreach (var character in characters)
-        {
-            if (character.occupyingTile == tile)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public CCharacter GetCharacterOnTile(CTile tile)
-    {
-        foreach (var character in characters)
-        {
-            if (character.occupyingTile == tile)
-            {
-                return character;
-            }
-        }
-
-        return null;
     }
 
     // Start is called before the first frame update
@@ -120,7 +94,7 @@ public class CTeam : MonoBehaviour
         }
     }
 
-    bool HaveAllCharactersEndedTurn()
+    protected bool HaveAllCharactersEndedTurn()
     {
         foreach(var character in characters)
         {
@@ -198,10 +172,8 @@ public class CTeam : MonoBehaviour
         currentlySelectedCharacter.OnSelected();
     }
 
-    [SerializeField]
-    List<CCharacter> characters;
-    CCharacter currentlySelectedCharacter;
+    protected CCharacter currentlySelectedCharacter;
 
-    bool isTeamsTurn = false;
-    bool shouldEndTurnNextUpdate = false;
+    protected bool isTeamsTurn = false;
+    protected bool shouldEndTurnNextUpdate = false;
 }

@@ -178,8 +178,8 @@ public class CharacterActionController : MonoBehaviour
     ECharacterAction currentlySelectedAction;
     TileMap map;
     CCharacter currentlySelectedCharacter;
-    List<CTeam> allTeams;
-    CTeam currentlySelectedTeam;
+    List<TeamBase> allTeams;
+    TeamBase currentlySelectedTeam;
 
     List<CTile> tilesInRange = new List<CTile>();
 

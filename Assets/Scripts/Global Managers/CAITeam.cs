@@ -1,0 +1,28 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CAITeam : TeamBase
+{
+    public override void BeginTurn()
+    {
+        Debug.Log("Beginning turn for AI team " + name);
+    }
+
+    public override void OnEndTurn()
+    {
+        Debug.Log("Ending turn for AI team " + name);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}

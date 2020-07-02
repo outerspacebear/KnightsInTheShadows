@@ -1364,7 +1364,7 @@ PrefabInstance:
     - target: {fileID: 8084598398704928200, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8084598398704928200, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
@@ -2377,7 +2377,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1739356429}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f9fa1d88f48ea244a022fc541b32176, type: 3}
+  m_Script: {fileID: 11500000, guid: ee4e38005604e17438337d9a68df4573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characters:
@@ -2681,7 +2681,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: bd199dc1e666d704d924956e27bec90f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: bd199dc1e666d704d924956e27bec90f,
         type: 3}
@@ -2735,15 +2735,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2134416994}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b362603e624b094892548f7ed5fe5b4, type: 3}
+  m_Script: {fileID: 11500000, guid: 1796d31a254093a40bc951e23cef5423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileHighlightColor: {r: 1, g: 0.0670706, b: 0, a: 1}
+  tileHighlightColor: {r: 1, g: 0.06575368, b: 0, a: 1}
   movementPerAction: 2
   baseActionPoints: 2
-  attackRange: 0
+  attackRange: 1
   attackDamage: 1
-  hitPoints: 0
+  hitPoints: 2
   startingPosition: {x: 1, y: 0, z: 5}
 --- !u!65 &2134416996
 BoxCollider:
