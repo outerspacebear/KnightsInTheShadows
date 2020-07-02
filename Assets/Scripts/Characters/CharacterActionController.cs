@@ -85,7 +85,7 @@ public class CharacterActionController : MonoBehaviour
 
     void OnCharacterSelected(CCharacter character) => currentlySelectedCharacter = character;
 
-    void OnTeamTurnStarted(CTeam team) => currentlySelectedTeam = team;
+    void OnTeamTurnStarted(TeamBase team) => currentlySelectedTeam = team;
 
     void Cleanup(CCharacter deselectedCharacter = null)
     {

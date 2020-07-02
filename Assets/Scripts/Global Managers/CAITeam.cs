@@ -7,6 +7,16 @@ public class CAITeam : TeamBase
     public override void BeginTurn()
     {
         Debug.Log("Beginning turn for AI team " + name);
+
+        foreach (var character in characters)
+        {
+            character.ResetActionPoints();
+        }
+
+        if (HaveAllCharactersEndedTurn())
+        {
+            shouldEndTurnNextUpdate = true;
+        }
     }
 
     public override void OnEndTurn()
@@ -23,6 +33,12 @@ public class CAITeam : TeamBase
     // Update is called once per frame
     void Update()
     {
-        
+        if(shouldEndTurnNextUpdate)
+        {
+            TeamEvents.teamTurnEndedEvent.Invoke(this);
+            shouldEndTurnNextUpdate = false;
+        }
     }
+
+    bool shouldEndTurnNextUpdate { get; set; } = false;
 }

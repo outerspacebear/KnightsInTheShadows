@@ -33,6 +33,19 @@ public abstract class TeamBase : MonoBehaviour
     public abstract void BeginTurn();
     public abstract void OnEndTurn();
 
+    protected bool HaveAllCharactersEndedTurn()
+    {
+        foreach (var character in characters)
+        {
+            if (character.currentActionPoints > 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

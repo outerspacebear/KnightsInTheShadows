@@ -91,7 +91,7 @@ public class LevelManager : MonoBehaviour
         teams[currentTeamIndex].BeginTurn();
     }
 
-    void OnTeamTurnEnded(CTeam team)
+    void OnTeamTurnEnded(TeamBase team)
     {
         if(team != teams[currentTeamIndex])
         {

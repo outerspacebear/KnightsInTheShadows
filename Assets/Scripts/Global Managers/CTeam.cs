@@ -94,19 +94,6 @@ public class CTeam : TeamBase
         }
     }
 
-    protected bool HaveAllCharactersEndedTurn()
-    {
-        foreach(var character in characters)
-        {
-            if(character.currentActionPoints > 0)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     void OnCharacterClickedOn(CCharacter character)
     {
         if(!isTeamsTurn)
