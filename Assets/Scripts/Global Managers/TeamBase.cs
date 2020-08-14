@@ -33,7 +33,7 @@ public abstract class TeamBase : MonoBehaviour
     public abstract void BeginTurn();
     public abstract void OnEndTurn();
 
-    protected bool HaveAllCharactersEndedTurn()
+    protected bool AreAllCharactersOutOfActions()
     {
         foreach (var character in characters)
         {

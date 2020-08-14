@@ -65,7 +65,7 @@ public class CTeam : TeamBase
             return;
         }
 
-        if (HaveAllCharactersEndedTurn())
+        if (AreAllCharactersOutOfActions())
         {
             shouldEndTurnNextUpdate = true;
             return;

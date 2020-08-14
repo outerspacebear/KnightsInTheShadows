@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime;
 
 public class CAITeam : TeamBase
 {
@@ -13,10 +15,14 @@ public class CAITeam : TeamBase
             character.ResetActionPoints();
         }
 
-        if (HaveAllCharactersEndedTurn())
+        if (AreAllCharactersOutOfActions())
         {
             shouldEndTurnNextUpdate = true;
         }
+
+        TeamEvents.teamTurnStartedEvent.Invoke(this);
+
+        ProcessTurn();
     }
 
     public override void OnEndTurn()
@@ -27,10 +33,12 @@ public class CAITeam : TeamBase
     // Start is called before the first frame update
     void Start()
     {
-        if(!AreAllCharactersAI())
-        {
-            Debug.LogError("All characters assigned to AI Team " + name + " are not AI characters!");
-        }
+        MapLoadedEvent.Get().AddListener(OnMapLoaded);
+    }
+
+    private void OnDestroy()
+    {
+        MapLoadedEvent.Get().RemoveListener(OnMapLoaded);
     }
 
     // Update is called once per frame
@@ -43,18 +51,52 @@ public class CAITeam : TeamBase
         }
     }
 
-    bool AreAllCharactersAI()
+    void OnMapLoaded(TileMap loadedMap) => map = loadedMap;
+
+    CCharacter TryGetNextAvailableCharacter()
     {
-        foreach(var character in characters)
+        Debug.Log("AI Team trying to find next available character!");
+        foreach (var character in characters)
         {
-            if(!(character is CAICharacter))
+            if (character.currentActionPoints > 0)
             {
-                return false;
+                return character;
             }
         }
 
-        return true;
+        Debug.Log("No available character found!");
+        return null;
+    }
+
+    void ProcessTurn()
+    {
+        Debug.Log("AI team processing turn");
+        while(!AreAllCharactersOutOfActions())
+        {
+            var currentCharacter = TryGetNextAvailableCharacter();
+            TakeActionsForCharacter(currentCharacter);
+        }
+
+        shouldEndTurnNextUpdate = true;
+    }
+
+    void TakeActionsForCharacter(CCharacter character)
+    {
+        Debug.Log("Determining course of action for character " + character.name);
+        while(character.currentActionPoints > 0)
+        {
+            //TODO: Make an actual system to do this properly
+            if(character.CanTakeAction(ECharacterAction.MOVE))
+            {
+                var tilesInRange = TileMapTools.GetTilesWithinMovementRange(map, 
+                    character.occupyingTile, character.GetMovementPerAction());
+                int randomlySelectedIndex = UnityEngine.Random.Range(0, tilesInRange.Count);
+                character.MoveTo(tilesInRange[randomlySelectedIndex]);
+            }
+        }
     }
 
     bool shouldEndTurnNextUpdate = false;
+
+    TileMap map;
 }
