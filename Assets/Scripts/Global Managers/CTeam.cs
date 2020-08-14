@@ -37,14 +37,14 @@ public class CTeam : TeamBase
     // Start is called before the first frame update
     void Start()
     {
-        CharacterClickedOnEvent.Get().AddListener(OnCharacterClickedOn);
+        CharacterEvents.characterClickedEvent.AddListener(OnCharacterClickedOn);
         CharacterEvents.actionTakenEvent.AddListener(OnCharacterActionTaken);
         CharacterEvents.characterDeathEvent.AddListener(OnCharacterDeath);
     }
 
     ~CTeam()
     {
-        CharacterClickedOnEvent.Get().RemoveListener(OnCharacterClickedOn);
+        CharacterEvents.characterClickedEvent.RemoveListener(OnCharacterClickedOn);
         CharacterEvents.actionTakenEvent.RemoveListener(OnCharacterActionTaken);
         CharacterEvents.characterDeathEvent.RemoveListener(OnCharacterDeath);
     }
