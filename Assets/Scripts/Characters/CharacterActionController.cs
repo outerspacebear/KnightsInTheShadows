@@ -85,7 +85,7 @@ public class CharacterActionController : MonoBehaviour
 
     void OnCharacterSelected(CCharacter character) => currentlySelectedCharacter = character;
 
-    void OnTeamTurnStarted(CTeam team) => currentlySelectedTeam = team;
+    void OnTeamTurnStarted(TeamBase team) => currentlySelectedTeam = team;
 
     void Cleanup(CCharacter deselectedCharacter = null)
     {
@@ -178,8 +178,8 @@ public class CharacterActionController : MonoBehaviour
     ECharacterAction currentlySelectedAction;
     TileMap map;
     CCharacter currentlySelectedCharacter;
-    List<CTeam> allTeams;
-    CTeam currentlySelectedTeam;
+    List<TeamBase> allTeams;
+    TeamBase currentlySelectedTeam;
 
     List<CTile> tilesInRange = new List<CTile>();
 

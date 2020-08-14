@@ -25,6 +25,13 @@ public class CCharacterUIManager : MonoBehaviour
         characterCanvas.SetActive(false);
     }
 
+    private void OnDestroy()
+    {
+        CharacterEvents.characterSelectedEvent.RemoveListener(OnCharacterSelected);
+        CharacterEvents.characterDeselectedEvent.RemoveListener(OnCharacterDeselected);
+        CharacterEvents.actionTakenEvent.RemoveListener(OnCharacterActionTaken);
+    }
+
     // Update is called once per frame
     void Update()
     {

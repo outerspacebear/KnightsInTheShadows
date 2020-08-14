@@ -54,7 +54,7 @@ public class CCharacter : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log("Character " + gameObject.name + "clicked on!");
-        CharacterClickedOnEvent.Get().Invoke(this);
+        CharacterEvents.characterClickedEvent.Invoke(this);
     }
 
     private void OnMouseOver()

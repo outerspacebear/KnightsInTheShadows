@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CTeam : MonoBehaviour
+public class CTeam : TeamBase
 {
-    public void BeginTurn()
+    public override void BeginTurn()
     {
         Debug.Log("Beginning turn for team " + name);
 
@@ -23,7 +23,7 @@ public class CTeam : MonoBehaviour
         TeamEvents.teamTurnStartedEvent.Invoke(this);
     }
 
-    public void OnEndTurn()
+    public override void OnEndTurn()
     {
         Debug.Log("Ending turn for team " + name);
         if(currentlySelectedCharacter)
@@ -34,43 +34,17 @@ public class CTeam : MonoBehaviour
         isTeamsTurn = false;
     }
 
-    public bool IsAnyCharacterOnTile(CTile tile)
-    {
-        foreach (var character in characters)
-        {
-            if (character.occupyingTile == tile)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public CCharacter GetCharacterOnTile(CTile tile)
-    {
-        foreach (var character in characters)
-        {
-            if (character.occupyingTile == tile)
-            {
-                return character;
-            }
-        }
-
-        return null;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
-        CharacterClickedOnEvent.Get().AddListener(OnCharacterClickedOn);
+        CharacterEvents.characterClickedEvent.AddListener(OnCharacterClickedOn);
         CharacterEvents.actionTakenEvent.AddListener(OnCharacterActionTaken);
         CharacterEvents.characterDeathEvent.AddListener(OnCharacterDeath);
     }
 
     ~CTeam()
     {
-        CharacterClickedOnEvent.Get().RemoveListener(OnCharacterClickedOn);
+        CharacterEvents.characterClickedEvent.RemoveListener(OnCharacterClickedOn);
         CharacterEvents.actionTakenEvent.RemoveListener(OnCharacterActionTaken);
         CharacterEvents.characterDeathEvent.RemoveListener(OnCharacterDeath);
     }
@@ -91,7 +65,7 @@ public class CTeam : MonoBehaviour
             return;
         }
 
-        if (HaveAllCharactersEndedTurn())
+        if (AreAllCharactersOutOfActions())
         {
             shouldEndTurnNextUpdate = true;
             return;
@@ -118,19 +92,6 @@ public class CTeam : MonoBehaviour
             TeamEvents.teamTurnEndedEvent.Invoke(this);
             shouldEndTurnNextUpdate = false;
         }
-    }
-
-    bool HaveAllCharactersEndedTurn()
-    {
-        foreach(var character in characters)
-        {
-            if(character.currentActionPoints > 0)
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     void OnCharacterClickedOn(CCharacter character)
@@ -198,10 +159,8 @@ public class CTeam : MonoBehaviour
         currentlySelectedCharacter.OnSelected();
     }
 
-    [SerializeField]
-    List<CCharacter> characters;
-    CCharacter currentlySelectedCharacter;
+    protected CCharacter currentlySelectedCharacter;
 
-    bool isTeamsTurn = false;
-    bool shouldEndTurnNextUpdate = false;
+    protected bool isTeamsTurn = false;
+    protected bool shouldEndTurnNextUpdate = false;
 }
