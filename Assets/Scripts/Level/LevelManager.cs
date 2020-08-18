@@ -106,7 +106,10 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
-        BeginNextTeamTurn();
+        if(!isLevelCompleted)
+        {
+            BeginNextTeamTurn();
+        }
     }
 
     void OnLevelObjectiveCompleted(LevelObjective objective)
@@ -118,6 +121,8 @@ public class LevelManager : MonoBehaviour
 
         if(targetLevelObjectives.Count == 0)
         {
+            Debug.Log("All objectives achieved; level is now complete!");
+            isLevelCompleted = true;
             LevelEvents.levelCompletedEvent.Invoke();
         }
     }
@@ -152,4 +157,5 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField]
     List<LevelObjective> targetLevelObjectives = new List<LevelObjective>();
+    bool isLevelCompleted = false;
 }
