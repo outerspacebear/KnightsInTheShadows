@@ -77,8 +77,7 @@ public class LevelObjective : MonoBehaviour
     {
         if(team == teamToEliminate)
         {
-            LevelEvents.objectiveCompleteEvent.Invoke(this);
-            Destroy(this);
+            OnObjectiveCompleted(teamToEliminate.name);
         }
     }
 
@@ -86,9 +85,15 @@ public class LevelObjective : MonoBehaviour
     {
         if(character == characterToEliminate)
         {
-            LevelEvents.objectiveCompleteEvent.Invoke(this);
-            Destroy(this);
+            OnObjectiveCompleted(characterToEliminate.name);
         }
+    }
+
+    void OnObjectiveCompleted(string objectiveName)
+    {
+        Debug.Log("Level objective " + type.ToString() + " " + objectiveName + " completed!");
+        LevelEvents.objectiveCompleteEvent.Invoke(this);
+        Destroy(this);
     }
 
     [SerializeField]
