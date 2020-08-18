@@ -119,6 +119,11 @@ public class CTeam : TeamBase
             }
             Debug.Log("Character " + character.name + " is dead!");
             Destroy(character.gameObject);
+
+            if (characters.Count == 0)
+            {
+                TeamEvents.teamEliminatedEvent.Invoke(this);
+            }
         }
     }
 

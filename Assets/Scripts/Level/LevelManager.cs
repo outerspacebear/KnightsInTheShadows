@@ -15,13 +15,20 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(targetLevelObjectives.Count == 0)
+        {
+            Debug.LogWarning("Level objectives not set! Level will never end!");
+        }
+
         TeamEvents.teamTurnEndedEvent.AddListener(OnTeamTurnEnded);
+        LevelEvents.objectiveCompleteEvent.AddListener(OnLevelObjectiveCompleted);
         Invoke("StartLevel", 1);
     }
 
     void OnDestroy()
     {
         TeamEvents.teamTurnEndedEvent.RemoveListener(OnTeamTurnEnded);
+        LevelEvents.objectiveCompleteEvent.RemoveListener(OnLevelObjectiveCompleted);
     }
 
     public void StartLevel()
@@ -99,7 +106,25 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
-        BeginNextTeamTurn();
+        if(!isLevelCompleted)
+        {
+            BeginNextTeamTurn();
+        }
+    }
+
+    void OnLevelObjectiveCompleted(LevelObjective objective)
+    {
+        if(targetLevelObjectives.Contains(objective))
+        {
+            targetLevelObjectives.Remove(objective);
+        }
+
+        if(targetLevelObjectives.Count == 0)
+        {
+            Debug.Log("All objectives achieved; level is now complete!");
+            isLevelCompleted = true;
+            LevelEvents.levelCompletedEvent.Invoke();
+        }
     }
 
     [SerializeField]
@@ -129,4 +154,8 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField]
     GameObject loadingScreen;
+
+    [SerializeField]
+    List<LevelObjective> targetLevelObjectives = new List<LevelObjective>();
+    bool isLevelCompleted = false;
 }

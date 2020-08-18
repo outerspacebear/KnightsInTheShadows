@@ -34,11 +34,13 @@ public class CAITeam : TeamBase
     void Start()
     {
         MapLoadedEvent.Get().AddListener(OnMapLoaded);
+        CharacterEvents.characterDeathEvent.AddListener(OnCharacterDeath);
     }
 
     private void OnDestroy()
     {
         MapLoadedEvent.Get().RemoveListener(OnMapLoaded);
+        CharacterEvents.characterDeathEvent.RemoveListener(OnCharacterDeath);
     }
 
     // Update is called once per frame
@@ -92,6 +94,20 @@ public class CAITeam : TeamBase
                     character.occupyingTile, character.GetMovementPerAction());
                 int randomlySelectedIndex = UnityEngine.Random.Range(0, tilesInRange.Count);
                 character.MoveTo(tilesInRange[randomlySelectedIndex]);
+            }
+        }
+    }
+    void OnCharacterDeath(CCharacter character)
+    {
+        if (characters.Contains(character))
+        {
+            characters.Remove(character);
+            Debug.Log("Character " + character.name + " is dead!");
+            Destroy(character.gameObject);
+
+            if(characters.Count == 0)
+            {
+                TeamEvents.teamEliminatedEvent.Invoke(this);
             }
         }
     }
