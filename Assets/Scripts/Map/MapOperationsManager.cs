@@ -39,7 +39,7 @@ public class MapOperationsManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Alpha1))
         {
-            LoadMap("level.xml");
+            LoadMap(levelSaveName + ".xml");
         }
         else if(Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -50,7 +50,7 @@ public class MapOperationsManager : MonoBehaviour
     public void LoadMap(string mapFile)
     {
         MapLoader mapLoader = new MapLoader(mapLoadProperties, GetAllTilePrefabs(), tileContainerTransform, baseGround);
-        var virtualMap = mapLoader.LoadMap("level.xml");
+        var virtualMap = mapLoader.LoadMap(mapFile);
         if(virtualMap != null)
         {
             Debug.Log("Map loaded successfully!");
