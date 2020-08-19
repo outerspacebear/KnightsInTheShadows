@@ -116,14 +116,10 @@ public class LevelManager : MonoBehaviour
     {
         if(targetLevelObjectives.Contains(objective))
         {
-            targetLevelObjectives.Remove(objective);
-        }
-
-        if(targetLevelObjectives.Count == 0)
-        {
-            Debug.Log("All objectives achieved; level is now complete!");
+            var winningTeam = objective.GetObjectiveOwner();
+            Debug.Log("Objective " + objective.GetObjectiveType() + " achieved by " + winningTeam.name);
             isLevelCompleted = true;
-            LevelEvents.levelCompletedEvent.Invoke();
+            LevelEvents.levelWonEvent.Invoke(winningTeam);
         }
     }
 
