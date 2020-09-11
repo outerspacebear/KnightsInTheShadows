@@ -4,6 +4,23 @@ using UnityEngine;
 
 public abstract class TeamBase : MonoBehaviour
 {
+    public abstract bool IsTeamAI();
+
+    public void InitialiseForSinglePlayerGame()
+    {
+        localPlayerNumber = teamNumber;
+    }
+
+    public void InitialiseForMultiplayerGame(int playerNumber)
+    {
+        localPlayerNumber = playerNumber;
+        isMultiplayerGame = true;
+    }
+
+    public int GetLocalPlayerNumber() => localPlayerNumber;
+
+    public int GetTeamNumber() => teamNumber;
+
     public bool IsAnyCharacterOnTile(CTile tile)
     {
         foreach (var character in characters)
@@ -49,15 +66,20 @@ public abstract class TeamBase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     [SerializeField]
     protected List<CCharacter> characters;
+
+    [SerializeField]
+    protected int teamNumber = 1;
+    protected int localPlayerNumber;
+    protected bool isMultiplayerGame = false;
 }

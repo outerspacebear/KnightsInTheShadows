@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CTile : MonoBehaviour
 {
     public int GetId() { return id; }

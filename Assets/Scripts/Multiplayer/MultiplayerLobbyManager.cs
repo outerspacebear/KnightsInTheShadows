@@ -26,7 +26,7 @@ public class MultiplayerLobbyManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        //Join a game
+        PhotonNetwork.JoinRandomRoom();
     }
 
     public void CreateGame()
@@ -89,10 +89,16 @@ public class MultiplayerLobbyManager : MonoBehaviourPunCallbacks
         {
             infoText.text = isGameAvailable ? "Game available!" : "No game available!";
         }
+        if(createGameButton)
+        {
+            createGameButton.interactable = !isGameAvailable;
+        }
     }
 
     [SerializeField]
     Button joinGameButton = null;
+    [SerializeField]
+    Button createGameButton = null;
     bool isGameAvailable = false;
 
     [SerializeField]

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Principal;
 using UnityEngine;
 using UnityEngine.Events;
+using Photon.Pun;
 
 public class CCharacter : MonoBehaviour
 {
@@ -43,7 +44,16 @@ public class CCharacter : MonoBehaviour
             return;
         }
         playerHighlighterDefaultPosition = playerHighlilghter.transform.position;
+
+        LevelEvents.levelIsMultiplayerEvent.AddListener(LevelIsMultiplayer);
     }
+
+    private void OnDestroy()
+    {
+        LevelEvents.levelIsMultiplayerEvent.RemoveListener(LevelIsMultiplayer);
+    }
+
+    void LevelIsMultiplayer() => isMultiplayerLevel = true;
 
     // Update is called once per frame
     void Update()
@@ -88,6 +98,19 @@ public class CCharacter : MonoBehaviour
         CharacterEvents.characterDeselectedEvent.Invoke(this);
     }
 
+    [PunRPC]
+    public void MoveToTileAtPosition(Vector3 tilePosition)
+    {
+        CTile targetTile = map.TryGetTileAt(tilePosition);
+        if(!targetTile)
+        {
+            Debug.LogError("Could not find tile at " + tilePosition.ToString() + "; something might have gone wrong!");
+            return;
+        }
+
+        MoveTo(targetTile);
+    }
+
     public void MoveTo(CTile tile)
     {
         transform.position = tile.transform.position;
@@ -103,13 +126,23 @@ public class CCharacter : MonoBehaviour
         Debug.Log("Character " + name + " is attacking character " + character.name + "!");
         currentActionPoints -= CharacterActions.actionCostMap[ECharacterAction.MOVE];
 
-        character.OnAttacked(attackDamage);
+        if(!isMultiplayerLevel)
+        {
+            character.OnAttacked(attackDamage);
+        }
+        else
+        {
+            PhotonView photonView = character.GetComponent<PhotonView>();
+            photonView.RPC("OnAttacked", RpcTarget.All, attackDamage);
+        }
+
         CharacterEvents.actionTakenEvent.Invoke(this, ECharacterAction.ATTACK);
     }
 
+    [PunRPC]
     public void OnAttacked(int damage)
     {
-        Debug.Log("Character " + name + " attacked for " + damage.ToString() + " damage!");
+        Debug.Log("Character " + name + " attacked for " + damage.ToString() + " damage! Remaining HP: " + hitPoints);
         CharacterEvents.characterAttackedEvent.Invoke(this);
 
         hitPoints -= damage;
@@ -127,6 +160,7 @@ public class CCharacter : MonoBehaviour
 
     void OnMapLoaded(TileMap map)
     {
+        this.map = map;
         transform.position = startingPosition;
 
         occupyingTile = null;
@@ -157,4 +191,7 @@ public class CCharacter : MonoBehaviour
 
     static GameObject playerHighlilghter;
     static Vector3 playerHighlighterDefaultPosition;
+
+    TileMap map;
+    bool isMultiplayerLevel = false;
 }

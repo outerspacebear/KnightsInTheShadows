@@ -4,8 +4,9 @@ using UnityEngine;
 using System.Linq;
 using MapProperties = MapOperationsManager.MapProperties;
 using System.Security.Cryptography;
+using Photon.Pun;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : MonoBehaviourPun
 {
     public List<TeamBase> GetAllTeams()
     {
@@ -18,6 +19,18 @@ public class LevelManager : MonoBehaviour
         if(targetLevelObjectives.Count == 0)
         {
             Debug.LogWarning("Level objectives not set! Level will never end!");
+        }
+
+        if(!isMultiplayerLevel)
+        {
+            foreach(var team in teams)
+            {
+                team.InitialiseForSinglePlayerGame();
+            }
+        }
+        else
+        {
+            SetUpMultiplayerLevel();
         }
 
         TeamEvents.teamTurnEndedEvent.AddListener(OnTeamTurnEnded);
@@ -39,6 +52,10 @@ public class LevelManager : MonoBehaviour
         }
         MapLoadedEvent.Get().Invoke(map);
         Debug.Log("Map loaded successfully!");
+        if(isMultiplayerLevel)
+        {
+            LevelEvents.levelIsMultiplayerEvent.Invoke();
+        }
 
         if(loadingScreen)
         {
@@ -52,6 +69,17 @@ public class LevelManager : MonoBehaviour
         }
         teams[currentTeamIndex].BeginTurn();
         hasLevelStarted = true;
+    }
+
+    void SetUpMultiplayerLevel()
+    {
+        int playerNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+        Debug.Log("Initialising teams for multiplayer. You are player number " + playerNumber.ToString());
+
+        foreach (var team in teams)
+        {
+            team.InitialiseForMultiplayerGame(playerNumber);
+        }
     }
 
     // Update is called once per frame
@@ -86,6 +114,7 @@ public class LevelManager : MonoBehaviour
         return tilePrefabs;
     }
 
+    [PunRPC]
     void BeginNextTeamTurn()
     {
         if(teams.Count == 0)
@@ -108,7 +137,15 @@ public class LevelManager : MonoBehaviour
 
         if(!isLevelCompleted)
         {
-            BeginNextTeamTurn();
+            if(isMultiplayerLevel)
+            {
+                PhotonView photonView = PhotonView.Get(this);
+                photonView.RPC("BeginNextTeamTurn", RpcTarget.All);
+            }
+            else
+            {
+                BeginNextTeamTurn();
+            }
         }
     }
 
@@ -154,4 +191,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     List<LevelObjective> targetLevelObjectives = new List<LevelObjective>();
     bool isLevelCompleted = false;
+
+    [SerializeField]
+    bool isMultiplayerLevel = false;
 }

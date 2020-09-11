@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Photon.Pun;
 
 public class LevelCompletedPanelManager : MonoBehaviour
 {
@@ -26,11 +28,13 @@ public class LevelCompletedPanelManager : MonoBehaviour
 
         levelCompletedPanel.SetActive(false);
         LevelEvents.levelWonEvent.AddListener(OnLevelWon);
+        LevelEvents.levelIsMultiplayerEvent.AddListener(LevelIsMultiplayer);
     }
 
     private void OnDestroy()
     {
         LevelEvents.levelWonEvent.RemoveListener(OnLevelWon);
+        LevelEvents.levelIsMultiplayerEvent.RemoveListener(LevelIsMultiplayer);
     }
 
     // Update is called once per frame
@@ -41,9 +45,30 @@ public class LevelCompletedPanelManager : MonoBehaviour
 
     void OnLevelWon(TeamBase team)
     {
+        bool didThisPlayerWin = false;
+
+        if(!isMultiplayerLevel)
+        {
+            didThisPlayerWin = !team.IsTeamAI();
+        }
+        else
+        {
+            didThisPlayerWin = team.GetLocalPlayerNumber() == team.GetTeamNumber();
+        }
+
+        panelText.text = didThisPlayerWin ? levelWinText : levelLoseText;
         levelCompletedPanel.SetActive(true);
     }
 
+    void LevelIsMultiplayer() => isMultiplayerLevel = true;
+
     [SerializeField]
     GameObject levelCompletedPanel;
+    [SerializeField]
+    Text panelText;
+
+    bool isMultiplayerLevel = false;
+
+    const string levelWinText = "You won! :D";
+    const string levelLoseText = "You lost! :(";
 }

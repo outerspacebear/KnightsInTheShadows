@@ -2552,6 +2552,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joinGameButton: {fileID: 476670558}
+  createGameButton: {fileID: 1444319089}
   infoText: {fileID: 262644592}
 --- !u!4 &552871566
 Transform:
@@ -6710,6 +6711,17 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1163138114}
         m_MethodName: MoveToTarget
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 552871565}
+        m_MethodName: RefreshAvailableGames
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
