@@ -6,32 +6,38 @@ public class CTeam : TeamBase
 {
     public override void BeginTurn()
     {
-        Debug.Log("Beginning turn for team " + name);
-
-        isTeamsTurn = true;
-        foreach(var character in characters)
+        if(teamNumber == localPlayerNumber)
         {
-            character.ResetActionPoints();
-        }
-        currentlySelectedCharacter = null;
+            Debug.Log("Beginning turn for team " + name);
 
-        if(!TrySelectNextAvailableCharacter())
-        {
-            shouldEndTurnNextUpdate = true;
-        }
+            isTeamsTurn = true;
+            foreach (var character in characters)
+            {
+                character.ResetActionPoints();
+            }
+            currentlySelectedCharacter = null;
 
-        TeamEvents.teamTurnStartedEvent.Invoke(this);
+            if (!TrySelectNextAvailableCharacter())
+            {
+                shouldEndTurnNextUpdate = true;
+            }
+
+            TeamEvents.teamTurnStartedEvent.Invoke(this);
+        }
     }
 
     public override void OnEndTurn()
     {
-        Debug.Log("Ending turn for team " + name);
-        if(currentlySelectedCharacter)
+        if(teamNumber == localPlayerNumber)
         {
-            currentlySelectedCharacter.OnDeselected();
-        }
+            Debug.Log("Ending turn for team " + name);
+            if (currentlySelectedCharacter)
+            {
+                currentlySelectedCharacter.OnDeselected();
+            }
 
-        isTeamsTurn = false;
+            isTeamsTurn = false;
+        }
     }
 
     // Start is called before the first frame update
@@ -51,69 +57,83 @@ public class CTeam : TeamBase
 
     void OnCharacterActionTaken(CCharacter character, ECharacterAction action)
     {
-        if(!isTeamsTurn)
+        if (teamNumber == localPlayerNumber)
         {
-            return;
+            if (!isTeamsTurn)
+            {
+                return;
+            }
+
+            Debug.Log("Character " + character.name + " did action " + action.ToString()
+                + " and now has " + character.currentActionPoints.ToString() + " action points");
+
+            if (character.currentActionPoints > 0)
+            {
+                SelectCharacter(character);
+                return;
+            }
+
+            if (AreAllCharactersOutOfActions())
+            {
+                shouldEndTurnNextUpdate = true;
+                return;
+            }
+
+            TrySelectNextAvailableCharacter();
         }
-
-        Debug.Log("Character " + character.name + " did action " + action.ToString() 
-            + " and now has " + character.currentActionPoints.ToString() + " action points");
-
-        if (character.currentActionPoints > 0)
-        {
-            SelectCharacter(character);
-            return;
-        }
-
-        if (AreAllCharactersOutOfActions())
-        {
-            shouldEndTurnNextUpdate = true;
-            return;
-        }
-
-        TrySelectNextAvailableCharacter();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!isTeamsTurn)
+        if (teamNumber == localPlayerNumber)
         {
-            return;
-        }
+            if (!isTeamsTurn)
+            {
+                return;
+            }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            TrySelectNextAvailableCharacter();
-        }
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                TrySelectNextAvailableCharacter();
+            }
 
-        if (shouldEndTurnNextUpdate)
-        {
-            TeamEvents.teamTurnEndedEvent.Invoke(this);
-            shouldEndTurnNextUpdate = false;
+            if (shouldEndTurnNextUpdate)
+            {
+                TeamEvents.teamTurnEndedEvent.Invoke(this);
+                shouldEndTurnNextUpdate = false;
+            }
         }
+    }
+
+    void EndTurn()
+    {
+
     }
 
     void OnCharacterClickedOn(CCharacter character)
     {
-        if(!isTeamsTurn)
+        if (teamNumber == localPlayerNumber)
         {
-            return;
-        }
+            if (!isTeamsTurn)
+            {
+                return;
+            }
 
-        if(character.currentActionPoints > 0 && currentlySelectedCharacter != character)
-        {
-            SelectCharacter(character);
+            if (character.currentActionPoints > 0 && currentlySelectedCharacter != character)
+            {
+                SelectCharacter(character);
+            }
         }
     }
 
     void OnCharacterDeath(CCharacter character)
     {
-        if(characters.Contains(character))
+        if (characters.Contains(character))
         {
             CharacterEvents.characterDeselectedEvent.Invoke(character);
             characters.Remove(character);
-            if(currentlySelectedCharacter == character)
+            if (currentlySelectedCharacter == character)
             {
                 currentlySelectedCharacter = null;
             }
@@ -162,6 +182,11 @@ public class CTeam : TeamBase
 
         currentlySelectedCharacter = character;
         currentlySelectedCharacter.OnSelected();
+    }
+
+    public override bool IsTeamAI()
+    {
+        return false;
     }
 
     protected CCharacter currentlySelectedCharacter;

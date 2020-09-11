@@ -111,6 +111,10 @@ public class CAITeam : TeamBase
             }
         }
     }
+    public override bool IsTeamAI()
+    {
+        return false;
+    }
 
     bool shouldEndTurnNextUpdate = false;
 

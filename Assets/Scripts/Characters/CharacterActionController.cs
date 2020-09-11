@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class CharacterActionController : MonoBehaviour
+public class CharacterActionController : MonoBehaviourPun
 {
     // Start is called before the first frame update
     void Start()
@@ -14,6 +15,7 @@ public class CharacterActionController : MonoBehaviour
         TileEvents.tileClickedOnEvent.AddListener(OnTileClickedOn);
         TeamEvents.teamTurnStartedEvent.AddListener(OnTeamTurnStarted);
         CharacterEvents.characterRightClickedEvent.AddListener(OnCharacterRightClickedOn);
+        LevelEvents.levelIsMultiplayerEvent.AddListener(LevelIsMultiplayer);
     }
 
     private void OnDestroy()
@@ -25,6 +27,7 @@ public class CharacterActionController : MonoBehaviour
         TileEvents.tileClickedOnEvent.RemoveListener(OnTileClickedOn);
         TeamEvents.teamTurnStartedEvent.RemoveListener(OnTeamTurnStarted);
         CharacterEvents.characterRightClickedEvent.RemoveListener(OnCharacterRightClickedOn);
+        LevelEvents.levelIsMultiplayerEvent.RemoveListener(LevelIsMultiplayer);
     }
 
     // Update is called once per frame
@@ -32,6 +35,8 @@ public class CharacterActionController : MonoBehaviour
     {
         
     }
+
+    void LevelIsMultiplayer() => isLevelMultiplayer = true;
 
     void OnActionButtonClicked(ECharacterAction action)
     {
@@ -104,7 +109,15 @@ public class CharacterActionController : MonoBehaviour
                     && tilesInRange.Contains(tile)
                     && !IsAnyCharacterOnTile(tile))
                 {
-                    currentlySelectedCharacter.MoveTo(tile);
+                    if(!isLevelMultiplayer)
+                    {
+                        currentlySelectedCharacter.MoveTo(tile);
+                    }
+                    else
+                    {
+                        PhotonView photonView = currentlySelectedCharacter.GetComponent<PhotonView>();
+                        photonView.RPC("MoveToTileAtPosition", RpcTarget.All, tile.transform.position);
+                    }
                 }
                 break;
             default:
@@ -185,4 +198,6 @@ public class CharacterActionController : MonoBehaviour
 
     [SerializeField]
     LevelManager levelManager;
+
+    bool isLevelMultiplayer = false;
 }
