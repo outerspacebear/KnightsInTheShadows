@@ -600,6 +600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
+  objectiveForTeam: {fileID: 517508192}
   teamToEliminate: {fileID: 1739356431}
   characterToEliminate: {fileID: 0}
 --- !u!1001 &461113690

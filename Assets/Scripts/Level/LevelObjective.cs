@@ -7,16 +7,24 @@ public class LevelObjective : MonoBehaviour
 {
     public enum EType { DEFAULT, TEAM_ELIMINATION, CHARACTER_ELIMINATION }
 
+    public EType GetObjectiveType() => type;
+    public TeamBase GetObjectiveOwner() => objectiveForTeam;
+
     // Start is called before the first frame update
     void Start()
     {
-        if(!IsObjectiveSetUpCorrectly())
+        if(!AreObjectivesSetUpCorrectly())
         {
-            Debug.LogWarning("Something is wrong with the level objective! It will not be activated!");
+            Debug.LogError("Something is wrong with the level objective! It will not be activated!");
+            return;
+        }
+        if(objectiveForTeam == null)
+        {
+            Debug.LogError("No owner team set for objective! It will not be activated!");
             return;
         }
 
-        switch(type)
+        switch (type)
         {
             case EType.TEAM_ELIMINATION:
                 TeamEvents.teamEliminatedEvent.AddListener(OnTeamEliminated);
@@ -46,12 +54,12 @@ public class LevelObjective : MonoBehaviour
         
     }
 
-    bool IsObjectiveSetUpCorrectly()
+    bool AreObjectivesSetUpCorrectly()
     {
-        switch(type)
+        switch (type)
         {
             case EType.TEAM_ELIMINATION:
-                if(teamToEliminate == null)
+                if (teamToEliminate == null)
                 {
                     Debug.LogError("Level objective type: Team Elimination - team to eliminate is null!");
                     return false;
@@ -98,6 +106,8 @@ public class LevelObjective : MonoBehaviour
 
     [SerializeField]
     private EType type = EType.DEFAULT;
+    [SerializeField]
+    private TeamBase objectiveForTeam = null;
     [SerializeField]
     private TeamBase teamToEliminate = null;
     [SerializeField]

@@ -25,12 +25,12 @@ public class LevelCompletedPanelManager : MonoBehaviour
         }
 
         levelCompletedPanel.SetActive(false);
-        LevelEvents.levelCompletedEvent.AddListener(OnLevelCompleted);
+        LevelEvents.levelWonEvent.AddListener(OnLevelWon);
     }
 
     private void OnDestroy()
     {
-        LevelEvents.levelCompletedEvent.RemoveListener(OnLevelCompleted);
+        LevelEvents.levelWonEvent.RemoveListener(OnLevelWon);
     }
 
     // Update is called once per frame
@@ -39,7 +39,7 @@ public class LevelCompletedPanelManager : MonoBehaviour
         
     }
 
-    void OnLevelCompleted()
+    void OnLevelWon(TeamBase team)
     {
         levelCompletedPanel.SetActive(true);
     }
