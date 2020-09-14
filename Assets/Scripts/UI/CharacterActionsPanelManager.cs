@@ -97,8 +97,13 @@ public class CharacterActionsPanelManager : MonoBehaviour
 
         if(shouldAutoSelectFirstAction)
         {
-            TryClickActionButton(0);
+            Invoke("TryClickDefaultActionButton", 0.1f);
         }
+    }
+
+    void TryClickDefaultActionButton()
+    {
+        TryClickActionButton(0);
     }
 
     void OnCharacterDeselected(CCharacter character)
