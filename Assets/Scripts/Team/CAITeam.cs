@@ -35,12 +35,14 @@ public class CAITeam : TeamBase
     {
         MapLoadedEvent.Get().AddListener(OnMapLoaded);
         CharacterEvents.characterDeathEvent.AddListener(OnCharacterDeath);
+        LevelEvents.pauseLevelEvent.AddListener(OnPauseOrResume);
     }
 
     private void OnDestroy()
     {
         MapLoadedEvent.Get().RemoveListener(OnMapLoaded);
         CharacterEvents.characterDeathEvent.RemoveListener(OnCharacterDeath);
+        LevelEvents.pauseLevelEvent.RemoveListener(OnPauseOrResume);
     }
 
     // Update is called once per frame
@@ -75,8 +77,11 @@ public class CAITeam : TeamBase
         Debug.Log("AI team processing turn");
         while(!AreAllCharactersOutOfActions())
         {
-            var currentCharacter = TryGetNextAvailableCharacter();
-            TakeActionsForCharacter(currentCharacter);
+            if(!gameIsPaused)
+            {
+                var currentCharacter = TryGetNextAvailableCharacter();
+                TakeActionsForCharacter(currentCharacter);
+            }
         }
 
         shouldEndTurnNextUpdate = true;
@@ -111,6 +116,12 @@ public class CAITeam : TeamBase
             }
         }
     }
+
+    void OnPauseOrResume(LevelEvents.PauseActions action)
+    {
+        gameIsPaused = action == LevelEvents.PauseActions.PAUSE ? true : false;
+    }
+
     public override bool IsTeamAI()
     {
         return false;
@@ -119,4 +130,6 @@ public class CAITeam : TeamBase
     bool shouldEndTurnNextUpdate = false;
 
     TileMap map;
+
+    bool gameIsPaused = false;
 }
