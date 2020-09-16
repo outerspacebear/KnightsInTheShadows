@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using System.Xml.Linq;
+using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
@@ -32,9 +34,22 @@ public class SaveManager : MonoBehaviour
     {
         Debug.Log("Attempting to save game!");
 
-        //Note the scene name
-        //Get save-able XML(?) from each team - consisting of state information about the team and characters
-        //Save all these things together in the folder
+        XElement xRoot = new XElement(XMLFields.Header);
+        xRoot.Add(new XElement(XMLFields.SceneIndex, SceneManager.GetActiveScene().buildIndex));
+
+        var allTeams = levelManager.GetAllTeams();
+        foreach(var team in allTeams)
+        {
+            XElement teamState = team.GetTeamStateAsXML();
+            xRoot.Add(teamState);
+        }
+
+        XDocument xSaveGame = new XDocument(xRoot);
+
+        string saveFileName = saveFolderName + "/" + name + ".xml";
+        xSaveGame.Save(saveFileName);
+
+        Debug.Log("Game saved as " + saveFileName);
 
         PopulateLoadGameList();
     }
@@ -46,6 +61,12 @@ public class SaveManager : MonoBehaviour
         //Make this SaveManager persist over scenes
         //Get all the stored info and hold it
         //Switch scenes, and then pass on the info to each team
+    }
+
+    static class XMLFields
+    {
+        public const string Header = "save_game";
+        public const string SceneIndex = "scene_index";
     }
 
     // Start is called before the first frame update

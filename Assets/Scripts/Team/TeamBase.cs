@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Xml.Linq;
 
 public abstract class TeamBase : MonoBehaviour
 {
@@ -49,6 +50,57 @@ public abstract class TeamBase : MonoBehaviour
 
     public abstract void BeginTurn();
     public abstract void OnEndTurn();
+
+    public XElement GetTeamStateAsXML()
+    {
+        XElement teamStateXML = new XElement(XMLFields.Team);
+        teamStateXML.SetAttributeValue(XMLFields.TeamName, gameObject.name);
+
+        foreach(var character in characters)
+        {
+            XElement characterXML = GetCharacterStateAsXML(character);
+            teamStateXML.Add(characterXML);
+        }
+
+        return teamStateXML;
+    }
+
+    public void LoadTeamStateFromXML()
+    {
+
+    }
+
+    protected static class XMLFields
+    {
+        public const string Team = "team";
+        public const string TeamName = "name";
+        public const string Character = "character";
+        public const string CharacterName = "c_name";
+        public const string ActionPoints = "action_points";
+        public const string HitPoints = "hit_points";
+        public const string Position = "position";
+        public const string PositionX = "x";
+        public const string PositionY = "y";
+        public const string PositionZ = "z";
+
+    }
+
+    XElement GetCharacterStateAsXML(CCharacter character)
+    {
+        XElement xCharacter = new XElement(XMLFields.Character,
+            new XElement(XMLFields.CharacterName, character.name),
+            new XElement(XMLFields.ActionPoints, character.currentActionPoints),
+            new XElement(XMLFields.HitPoints, character.GetHitPoints()));
+
+        Vector3 characterPosition = character.transform.position;
+        XElement xPosition = new XElement(XMLFields.Position,
+            new XElement(XMLFields.PositionX, characterPosition.x),
+            new XElement(XMLFields.PositionY, characterPosition.y),
+            new XElement(XMLFields.PositionZ, characterPosition.z));
+
+        xCharacter.Add(xPosition);
+        return xCharacter;
+    }
 
     protected bool AreAllCharactersOutOfActions()
     {

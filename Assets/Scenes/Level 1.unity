@@ -11117,7 +11117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelManager: {fileID: 1472697379}
-  saveNameText: {fileID: 0}
+  saveNameText: {fileID: 880520519}
   loadGameDropdownList: {fileID: 1820182370}
   saveFolderName: Saved Games
 --- !u!1 &1476224243
