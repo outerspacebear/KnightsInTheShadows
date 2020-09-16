@@ -35,7 +35,7 @@ public class LevelManager : MonoBehaviourPun
 
         TeamEvents.teamTurnEndedEvent.AddListener(OnTeamTurnEnded);
         LevelEvents.objectiveCompleteEvent.AddListener(OnLevelObjectiveCompleted);
-        Invoke("StartLevel", 1);
+        Invoke("StartLevel", 1f);
     }
 
     void OnDestroy()

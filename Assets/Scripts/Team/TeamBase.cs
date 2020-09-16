@@ -56,7 +56,7 @@ public abstract class TeamBase : MonoBehaviour
         XElement teamStateXML = new XElement(XMLFields.Team);
         teamStateXML.SetAttributeValue(XMLFields.TeamName, gameObject.name);
 
-        foreach(var character in characters)
+        foreach (var character in characters)
         {
             XElement characterXML = GetCharacterStateAsXML(character);
             teamStateXML.Add(characterXML);
@@ -65,9 +65,56 @@ public abstract class TeamBase : MonoBehaviour
         return teamStateXML;
     }
 
-    public void LoadTeamStateFromXML()
+    public void LoadTeamStateFromXML(XDocument xLoadFile)
     {
+        XElement root = xLoadFile.Element(SaveManager.XMLFields.Header);
+        XElement xThisTeam = null;
 
+        foreach (var xTeam in root.Elements(XMLFields.Team))
+        {
+            if (xTeam.Attribute(XMLFields.TeamName).Value == this.name)
+            {
+                xThisTeam = xTeam;
+                break;
+            }
+        }
+
+        if (xThisTeam == null)
+        {
+            Debug.LogWarning("No saved state found for team " + name);
+            return;
+        }
+
+        var xCharacters = xThisTeam.Elements(XMLFields.Character);
+        List<CCharacter> deadCharacters = new List<CCharacter>();
+
+        foreach (var character in characters)
+        {
+            bool foundSavedStateForCharacter = false;
+            foreach(var xCharacter in xCharacters)
+            {
+                string xName = xCharacter.Element(XMLFields.CharacterName).Value; ;
+                if(character.name == xName)
+                {
+                    LoadCharacterStateFromXML(character, xCharacter);
+                    foundSavedStateForCharacter = true;
+                    break;
+                }
+            }
+
+            if(!foundSavedStateForCharacter)
+            {
+                deadCharacters.Add(character);
+            }
+        }
+
+        foreach(var deadCharacter in deadCharacters)
+        {
+            characters.Remove(deadCharacter);
+            Destroy(deadCharacter.gameObject);
+        }
+
+        loadedState = true;
     }
 
     protected static class XMLFields
@@ -102,6 +149,49 @@ public abstract class TeamBase : MonoBehaviour
         return xCharacter;
     }
 
+    void LoadCharacterStateFromXML(CCharacter character, XElement xCharacter)
+    {
+        //Action points
+        string actionPointsStr = xCharacter.Element(XMLFields.ActionPoints).Value;
+        int actionPoints;
+
+        if (!int.TryParse(actionPointsStr, out actionPoints))
+        {
+            Debug.LogError("Action points for character " + character.name + " not saved as a string!");
+            return;
+        }
+
+        //Hit points
+        string hitPointsStr = xCharacter.Element(XMLFields.HitPoints).Value;
+        int hitPoints;
+
+        if (!int.TryParse(hitPointsStr, out hitPoints))
+        {
+            Debug.LogError("Hit points for character " + character.name + " not saved as a string!");
+            return;
+        }
+
+        //Position
+        XElement xPosition = xCharacter.Element(XMLFields.Position);
+
+        string posXStr = xPosition.Element(XMLFields.PositionX).Value;
+        string posYStr = xPosition.Element(XMLFields.PositionY).Value;
+        string posZStr = xPosition.Element(XMLFields.PositionZ).Value;
+        int posX, posY, posZ;
+
+        if (!int.TryParse(posXStr, out posX) || !int.TryParse(posYStr, out posY) || !int.TryParse(posZStr, out posZ))
+        {
+            Debug.LogError("Position of character " + character.name + " not saved as string!");
+            return;
+        }
+
+        //Update character state
+        character.currentActionPoints = actionPoints;
+        character.SetHitPoints(hitPoints);
+        Vector3 loadPosition = new Vector3(posX, posY, posZ);
+        character.SetStartingPosition(loadPosition);
+    }
+
     protected bool AreAllCharactersOutOfActions()
     {
         foreach (var character in characters)
@@ -116,9 +206,14 @@ public abstract class TeamBase : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        TeamEvents.loadTeamStateFromXMLEvent.AddListener(LoadTeamStateFromXML);
+    }
 
+    private void OnDestroy()
+    {
+        TeamEvents.loadTeamStateFromXMLEvent.RemoveListener(LoadTeamStateFromXML);
     }
 
     // Update is called once per frame
@@ -134,4 +229,6 @@ public abstract class TeamBase : MonoBehaviour
     protected int teamNumber = 1;
     protected int localPlayerNumber;
     protected bool isMultiplayerGame = false;
+
+    protected bool loadedState = false;
 }

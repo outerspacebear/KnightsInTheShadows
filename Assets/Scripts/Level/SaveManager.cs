@@ -19,23 +19,12 @@ public class SaveManager : MonoBehaviour
         SaveGame(saveNameText.text);
     }
 
-    public void LoadGameFromMenu()
-    {
-        if (!loadGameDropdownList)
-        {
-            Debug.LogError("Load game list not assigned to save manager; unable to load from menu!");
-            return;
-        }
-
-        LoadGame(loadGameDropdownList.options[loadGameDropdownList.value].text);
-    }
-
     void SaveGame(string name)
     {
         Debug.Log("Attempting to save game!");
 
         XElement xRoot = new XElement(XMLFields.Header);
-        xRoot.Add(new XElement(XMLFields.SceneIndex, SceneManager.GetActiveScene().buildIndex));
+        xRoot.Add(new XElement(XMLFields.SceneName, SceneManager.GetActiveScene().name));
 
         var allTeams = levelManager.GetAllTeams();
         foreach(var team in allTeams)
@@ -50,23 +39,12 @@ public class SaveManager : MonoBehaviour
         xSaveGame.Save(saveFileName);
 
         Debug.Log("Game saved as " + saveFileName);
-
-        PopulateLoadGameList();
-    }
-    void LoadGame(string name)
-    {
-        Debug.Log("Attempting to load game!");
-
-        //Make sure file exists and that it is indeed a saved level
-        //Make this SaveManager persist over scenes
-        //Get all the stored info and hold it
-        //Switch scenes, and then pass on the info to each team
     }
 
-    static class XMLFields
+    public static class XMLFields
     {
         public const string Header = "save_game";
-        public const string SceneIndex = "scene_index";
+        public const string SceneName = "scene_name";
     }
 
     // Start is called before the first frame update
@@ -77,22 +55,6 @@ public class SaveManager : MonoBehaviour
             Debug.LogError("Level manager not assigned to SaveManager!");
             return;
         }
-
-        PopulateLoadGameList();
-    }
-
-    void PopulateLoadGameList()
-    {
-        DirectoryInfo saveFolder = new DirectoryInfo(saveFolderName);
-        FileInfo[] saveFiles = saveFolder.GetFiles("*.xml");
-        List<string> saveFileNames = new List<string>();
-
-        foreach (var saveFile in saveFiles)
-        {
-            saveFileNames.Add(saveFile.Name);
-        }
-
-        loadGameDropdownList.AddOptions(saveFileNames);
     }
 
     // Update is called once per frame
@@ -105,8 +67,6 @@ public class SaveManager : MonoBehaviour
     LevelManager levelManager = null;
     [SerializeField]
     Text saveNameText = null;
-    [SerializeField]
-    Dropdown loadGameDropdownList = null;
-    [SerializeField][Tooltip("Folder in which saves are stored. Used for both saving and loading.")]
+    [SerializeField][Tooltip("Folder in which saves are to be stored.")]
     string saveFolderName = "Saved Games";
 }

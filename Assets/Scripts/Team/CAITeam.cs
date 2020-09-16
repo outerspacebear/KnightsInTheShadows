@@ -12,7 +12,10 @@ public class CAITeam : TeamBase
 
         foreach (var character in characters)
         {
-            character.ResetActionPoints();
+            if(!loadedState)
+            {
+                character.ResetActionPoints();
+            }
         }
 
         if (AreAllCharactersOutOfActions())
@@ -33,6 +36,7 @@ public class CAITeam : TeamBase
     // Start is called before the first frame update
     void Start()
     {
+        base.Start();
         MapLoadedEvent.Get().AddListener(OnMapLoaded);
         CharacterEvents.characterDeathEvent.AddListener(OnCharacterDeath);
         LevelEvents.pauseLevelEvent.AddListener(OnPauseOrResume);

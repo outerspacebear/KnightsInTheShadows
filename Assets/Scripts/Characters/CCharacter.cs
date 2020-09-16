@@ -36,7 +36,10 @@ public class CCharacter : MonoBehaviour
     {
         MapLoadedEvent.Get().AddListener(OnMapLoaded);
 
-        currentActionPoints = baseActionPoints;
+        if(!loadedState)
+        {
+            currentActionPoints = baseActionPoints;
+        }
 
         if (!(playerHighlilghter = GameObject.Find("PlayerHighlighter")))
         {
@@ -158,17 +161,28 @@ public class CCharacter : MonoBehaviour
 
     public int GetHitPoints() => hitPoints;
 
-    void OnMapLoaded(TileMap map)
-    {
-        this.map = map;
-        transform.position = startingPosition;
+    public void SetHitPoints(int hitPoints) => this.hitPoints = hitPoints;
 
+    public void RefreshOccupyingTile()
+    {
         occupyingTile = null;
         if (!(occupyingTile = map.TryGetTileAt(transform.position)))
         {
             Debug.LogError("Character " + gameObject.name + " is not placed on a valid tile");
             return;
         }
+    }
+
+    public void SetStartingPosition(Vector3 newPosition) => startingPosition = newPosition;
+
+    public void LoadedState() => loadedState = true;
+
+    void OnMapLoaded(TileMap map)
+    {
+        this.map = map;
+        transform.position = startingPosition;
+
+        RefreshOccupyingTile();
     }
 
     public int currentActionPoints { get; set; }
@@ -194,4 +208,6 @@ public class CCharacter : MonoBehaviour
 
     TileMap map;
     bool isMultiplayerLevel = false;
+
+    bool loadedState = false;
 }

@@ -13,7 +13,10 @@ public class CTeam : TeamBase
             isTeamsTurn = true;
             foreach (var character in characters)
             {
-                character.ResetActionPoints();
+                if (!loadedState)
+                {
+                    character.ResetActionPoints();
+                }
             }
             currentlySelectedCharacter = null;
 
@@ -43,6 +46,7 @@ public class CTeam : TeamBase
     // Start is called before the first frame update
     void Start()
     {
+        base.Start();
         CharacterEvents.characterClickedEvent.AddListener(OnCharacterClickedOn);
         CharacterEvents.actionTakenEvent.AddListener(OnCharacterActionTaken);
         CharacterEvents.characterDeathEvent.AddListener(OnCharacterDeath);
