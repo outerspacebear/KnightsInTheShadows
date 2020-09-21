@@ -68,7 +68,10 @@ public static class TileMapTools
         {
             if (adjacentTile = map.TryGetTileAtIndices(new Vector3(tileIndices.x, tileIndices.y, tileIndices.z)))
             {
-                bool canMoveTo = adjacentTile.CanMoveOn() && adjacentTile.GetMovementCost() <= availableMovementPoints;
+                bool canMoveTo = adjacentTile.CanMoveOn() 
+                    && adjacentTile.GetMovementCost() <= availableMovementPoints
+                    && adjacentTile.CanMoveToFromTile(origin);
+
                 if (canMoveTo)
                 {
                     int remainingMovementCost = availableMovementPoints - adjacentTile.GetMovementCost();
