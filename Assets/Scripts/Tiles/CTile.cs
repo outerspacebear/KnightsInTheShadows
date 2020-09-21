@@ -5,6 +5,47 @@ using UnityEngine;
 
 public class CTile : MonoBehaviour
 {
+    public enum EDirection { FRONT, BACK, LEFT, RIGHT};
+
+    public bool CanMoveToFromTile(CTile tile)
+    {
+        //Doesn't have any walls
+        if(wallDirections == null || wallDirections.Count == 0)
+        {
+            return true;
+        }
+
+        //Has one or more walls
+        foreach(EDirection direction in wallDirections)
+        {
+            Vector3 directionVector = Vector3.zero;
+            switch(direction)
+            {
+                case EDirection.FRONT:
+                    directionVector = transform.forward;
+                    break;
+                case EDirection.BACK:
+                    directionVector = -transform.forward;
+                    break;
+                case EDirection.RIGHT:
+                    directionVector = transform.right;
+                    break;
+                case EDirection.LEFT:
+                    directionVector = -transform.right;
+                    break;
+            }
+
+            //The position of the tile on the other end of this wall
+            Vector3 blockedTilePosition = transform.position + directionVector;
+            if(tile.transform.position == blockedTilePosition)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public int GetId() { return id; }
 
     public int GetMovementCost() { return movementCost; }
@@ -81,4 +122,7 @@ public class CTile : MonoBehaviour
 
     MeshRenderer meshRenderer;
     Color meshRendererOriginalColour;
+
+    [SerializeField][Tooltip("Directions in which the tile has a wall (to block movement)")]
+    List<EDirection> wallDirections = null;
 }

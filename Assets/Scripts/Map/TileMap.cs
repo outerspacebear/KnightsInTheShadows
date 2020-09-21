@@ -50,16 +50,21 @@ public class TileMap
         return new Vector3Int(cellX, tileY, rowZ);
     }
 
-    public CTile TryGetTileAt(Vector3Int indices)
+    public CTile TryGetTileAtIndices(Vector3 indices)
     {
-        if(indices.x < 0 || indices.y < 0 || indices.z < 0
-            || indices.z >= map.rows.Count || indices.x >= map.rows[indices.z].cells.Count
-            || indices.y >= map.rows[indices.z].cells[indices.x].tiles.Count)
+        
+        int zIndex = Mathf.RoundToInt(indices.z);
+        int xIndex = Mathf.RoundToInt(indices.x);
+        int yIndex = Mathf.RoundToInt(indices.y);
+
+        if (indices.x < 0 || indices.y < 0 || indices.z < 0
+            || indices.z >= map.rows.Count || indices.x >= map.rows[zIndex].cells.Count
+            || indices.y >= map.rows[zIndex].cells[xIndex].tiles.Count)
         {
             return null;
         }
 
-        return map.rows[indices.z].cells[indices.x].tiles[indices.y];
+        return map.rows[zIndex].cells[xIndex].tiles[yIndex];
     }
 
     public CTile TryGetTileAt(Vector3 worldPosition)

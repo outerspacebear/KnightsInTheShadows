@@ -111,6 +111,7 @@ MonoBehaviour:
   id: 19
   canMoveOn: 1
   movementCost: 1
+  wallDirections: 0000000002000000
 --- !u!1001 &8523201179699691620
 PrefabInstance:
   m_ObjectHideFlags: 0

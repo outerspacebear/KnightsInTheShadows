@@ -98,6 +98,7 @@ MonoBehaviour:
   id: 20
   canMoveOn: 1
   movementCost: 1
+  wallDirections: 02000000
 --- !u!65 &9107947066122511815
 BoxCollider:
   m_ObjectHideFlags: 0

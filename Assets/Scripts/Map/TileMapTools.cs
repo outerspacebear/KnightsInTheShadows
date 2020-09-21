@@ -57,16 +57,16 @@ public static class TileMapTools
         Vector3Int originTileIndices = map.GetTileIndices(origin);
         CTile adjacentTile = null;
 
-        List<Vector3Int> adjacentTileIndices = new List<Vector3Int>();
+        List<Vector3> adjacentTileIndices = new List<Vector3>();
         //Front, back, left, right
-        adjacentTileIndices.Add(new Vector3Int(originTileIndices.x, originTileIndices.y, originTileIndices.z + 1));
-        adjacentTileIndices.Add(new Vector3Int(originTileIndices.x, originTileIndices.y, originTileIndices.z - 1));
-        adjacentTileIndices.Add(new Vector3Int(originTileIndices.x - 1, originTileIndices.y, originTileIndices.z));
-        adjacentTileIndices.Add(new Vector3Int(originTileIndices.x + 1, originTileIndices.y, originTileIndices.z));
+        adjacentTileIndices.Add(originTileIndices + origin.transform.forward);
+        adjacentTileIndices.Add(originTileIndices - origin.transform.forward);
+        adjacentTileIndices.Add(originTileIndices - origin.transform.right);
+        adjacentTileIndices.Add(originTileIndices + origin.transform.right);
 
         foreach (var tileIndices in adjacentTileIndices)
         {
-            if (adjacentTile = map.TryGetTileAt(new Vector3Int(tileIndices.x, tileIndices.y, tileIndices.z)))
+            if (adjacentTile = map.TryGetTileAtIndices(new Vector3(tileIndices.x, tileIndices.y, tileIndices.z)))
             {
                 bool canMoveTo = adjacentTile.CanMoveOn() && adjacentTile.GetMovementCost() <= availableMovementPoints;
                 if (canMoveTo)
