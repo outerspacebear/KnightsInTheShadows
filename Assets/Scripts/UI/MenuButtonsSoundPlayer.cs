@@ -18,14 +18,6 @@ public class MenuButtonsSoundPlayer : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    private void OnDestroy()
-    {
-        foreach (var button in buttons)
-        {
-            button.onClick.RemoveListener(OnButtonClicked);
-        }
-    }
-
     void OnButtonClicked()
     {
         audioSource.Play();
