@@ -1783,7 +1783,7 @@ MonoBehaviour:
   contentPanelTransform: {fileID: 645375490}
   logTextPrefab: {fileID: 2225102432032996380, guid: 6af800d234e1efe49b0698d6b6f74846,
     type: 3}
-  logLifetime: 2
+  logLifetime: 1.3
 --- !u!1001 &219737728
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2500,6 +2500,8 @@ MonoBehaviour:
   - {fileID: 1779590717}
   - {fileID: 1067954576}
   teamNumber: 2
+  actionTimeout: 1.5
+  actionController: {fileID: 1472697378}
 --- !u!4 &314505792
 Transform:
   m_ObjectHideFlags: 0
@@ -5434,7 +5436,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0

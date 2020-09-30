@@ -142,7 +142,7 @@ public class CharacterActionController : MonoBehaviourPun
         }
     }
 
-    bool IsAnyCharacterOnTile(CTile tile)
+    public bool IsAnyCharacterOnTile(CTile tile)
     {
         foreach(var team in allTeams)
         {
@@ -156,7 +156,7 @@ public class CharacterActionController : MonoBehaviourPun
     }
 
     //Enemy refers to any team other than thecurrently selected one
-    bool IsEnemyCharacterOnTile(CTile tile)
+    public bool IsEnemyCharacterOnTile(CTile tile)
     {
         foreach (var team in allTeams)
         {
@@ -174,7 +174,7 @@ public class CharacterActionController : MonoBehaviourPun
         return false;
     }
 
-    CCharacter GetCharacterOnTile(CTile tile)
+    public CCharacter GetCharacterOnTile(CTile tile)
     {
         foreach (var team in allTeams)
         {

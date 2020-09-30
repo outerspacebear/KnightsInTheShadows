@@ -25,7 +25,7 @@ public class CAITeam : TeamBase
 
         TeamEvents.teamTurnStartedEvent.Invoke(this);
 
-        ProcessTurn();
+        ProcessTurnWithTimeouts();
     }
 
     public override void OnEndTurn()
@@ -76,34 +76,65 @@ public class CAITeam : TeamBase
         return null;
     }
 
-    void ProcessTurn()
+    void ProcessTurnWithTimeouts()
     {
-        Debug.Log("AI team processing turn");
-        while(!AreAllCharactersOutOfActions())
+        if (!AreAllCharactersOutOfActions())
         {
-            if(!gameIsPaused)
+            if (!gameIsPaused)
             {
                 var currentCharacter = TryGetNextAvailableCharacter();
-                TakeActionsForCharacter(currentCharacter);
+                TakeActionForCharacter(currentCharacter);
+
+                Invoke("ProcessTurnWithTimeouts", actionTimeout);
             }
         }
-
-        shouldEndTurnNextUpdate = true;
+        else
+        {
+            shouldEndTurnNextUpdate = true;
+        }
     }
 
-    void TakeActionsForCharacter(CCharacter character)
+    void TakeActionForCharacter(CCharacter character)
     {
         Debug.Log("Determining course of action for character " + character.name);
-        while(character.currentActionPoints > 0)
+        
+        if(character.CanTakeAction(ECharacterAction.ATTACK))
         {
-            //TODO: Make an actual system to do this properly
-            if(character.CanTakeAction(ECharacterAction.MOVE))
+            var tilesInRange = TileMapTools.GetTilesWithinMovementRange(map,
+                character.occupyingTile, character.GetAttackRange());
+
+            foreach(var tile in tilesInRange)
             {
-                var tilesInRange = TileMapTools.GetTilesWithinMovementRange(map, 
-                    character.occupyingTile, character.GetMovementPerAction());
-                int randomlySelectedIndex = UnityEngine.Random.Range(0, tilesInRange.Count);
-                character.MoveTo(tilesInRange[randomlySelectedIndex]);
+                if(actionController.IsEnemyCharacterOnTile(tile))
+                {
+                    var characterToAttack = actionController.GetCharacterOnTile(tile);
+                    character.Attack(characterToAttack);
+                    CharacterEvents.aiActionTakenEvent.Invoke(character, ECharacterAction.ATTACK);
+                    return;
+                }
             }
+        }
+        
+        if(character.CanTakeAction(ECharacterAction.MOVE))
+        {
+            var tilesInRange = TileMapTools.GetTilesWithinMovementRange(map, 
+                character.occupyingTile, character.GetMovementPerAction());
+            int randomlySelectedIndex = UnityEngine.Random.Range(0, tilesInRange.Count);
+            while(actionController.IsAnyCharacterOnTile(tilesInRange[randomlySelectedIndex]))
+            {
+                if(tilesInRange.Count == 0)
+                {
+                    Debug.LogWarning("Character could not find a tile to MOVE to! Weird!");
+                    character.ExhaustActionPoints();
+                    return;
+                }
+
+                tilesInRange.RemoveAt(randomlySelectedIndex);
+                randomlySelectedIndex = UnityEngine.Random.Range(0, tilesInRange.Count);
+            }
+            character.MoveTo(tilesInRange[randomlySelectedIndex]);
+            CharacterEvents.aiActionTakenEvent.Invoke(character, ECharacterAction.MOVE);
+            return;
         }
     }
     void OnCharacterDeath(CCharacter character)
@@ -136,4 +167,10 @@ public class CAITeam : TeamBase
     TileMap map;
 
     bool gameIsPaused = false;
+
+    [SerializeField][Tooltip("The time the AI will wait before performing each action")]
+    float actionTimeout = 1.5f;
+
+    [SerializeField]
+    CharacterActionController actionController;
 }

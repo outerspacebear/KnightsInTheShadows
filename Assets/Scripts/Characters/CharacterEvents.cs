@@ -13,6 +13,7 @@ public static class CharacterEvents
     public class CharacterDeathEvent : UnityEvent<CCharacter> { }
     public class CharacterClickedEvent : UnityEvent<CCharacter> { }
     public class CharacterRightClickedEvent: UnityEvent<CCharacter> { }
+    public class AIActionTakenEvent : UnityEvent<CCharacter, ECharacterAction> { }
 
 
     public static ActionTakenEvent actionTakenEvent { get; } = new ActionTakenEvent();
@@ -22,4 +23,5 @@ public static class CharacterEvents
     public static CharacterDeathEvent characterDeathEvent { get; } = new CharacterDeathEvent();
     public static CharacterClickedEvent characterClickedEvent { get; } = new CharacterClickedEvent();
     public static CharacterRightClickedEvent characterRightClickedEvent { get; } = new CharacterRightClickedEvent();
+    public static AIActionTakenEvent aiActionTakenEvent { get; } = new AIActionTakenEvent();
 }

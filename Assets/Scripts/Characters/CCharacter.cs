@@ -31,6 +31,12 @@ public class CCharacter : MonoBehaviour
         return false;
     }
 
+    //Could be used to take a 'fake action'
+    public void ExhaustActionPoints()
+    {
+        currentActionPoints = 0;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

@@ -60,5 +60,5 @@ public class LogDisplayer : MonoBehaviour
 
     List<GameObject> logs = new List<GameObject>();
     [SerializeField][Tooltip("Each entry will be deleted after this amount of time.")]
-    float logLifetime = 2.0f;
+    float logLifetime = 1.3f;
 }
