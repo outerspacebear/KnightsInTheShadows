@@ -479,6 +479,7 @@ MonoBehaviour:
   moveSound: {fileID: 8300000, guid: 3efc4218c5a1b8c46b6044eea1110362, type: 3}
   attackSound: {fileID: 8300000, guid: ec5e5e0da1eaea24fbc1c91d81f90af9, type: 3}
   deathSound: {fileID: 8300000, guid: fa4a6b15554d96f448a77f2531a44f94, type: 3}
+  slashSound: {fileID: 8300000, guid: 007874ff51e634443aefe2acd995f051, type: 3}
 --- !u!82 &32630030
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1618,7 +1619,7 @@ PrefabInstance:
     - target: {fileID: 6720455649233435854, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
         type: 3}
       propertyPath: m_Name
-      value: BaseCharacter_Red (1)
+      value: Enemy Knight
       objectReference: {fileID: 0}
     - target: {fileID: 7717062094608502493, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
         type: 3}
@@ -6151,7 +6152,7 @@ PrefabInstance:
     - target: {fileID: 5073615799330617307, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
       propertyPath: m_Name
-      value: BaseCharacter
+      value: Knight
       objectReference: {fileID: 0}
     - target: {fileID: 8084598398704928200, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
@@ -6213,7 +6214,8 @@ PrefabInstance:
       propertyPath: characterCanvas
       value: 
       objectReference: {fileID: 520010757}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b727813fc68cdab4cabf8049db657fc5, type: 3}
 --- !u!1 &520010757 stripped
 GameObject:
@@ -6221,18 +6223,31 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 520010756}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &520010758 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5,
+--- !u!1 &520010759 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5073615799330617307, guid: b727813fc68cdab4cabf8049db657fc5,
     type: 3}
   m_PrefabInstance: {fileID: 520010756}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &520010760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520010759}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b362603e624b094892548f7ed5fe5b4, type: 3}
+  m_Script: {fileID: 11500000, guid: cb1144bc8d996fa4c993ebafc4e74f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileHighlightColor: {r: 0, g: 1, b: 1, a: 1}
+  movementPerAction: 1
+  baseActionPoints: 2
+  attackRange: 1
+  attackDamage: 2
+  hitPoints: 7
+  startingPosition: {x: 1, y: 0, z: 1}
 --- !u!1001 &535999834
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8127,7 +8142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characters:
-  - {fileID: 520010758}
+  - {fileID: 520010760}
   - {fileID: 1286776780}
   teamNumber: 1
 --- !u!1001 &727126925
@@ -14113,10 +14128,20 @@ PrefabInstance:
       propertyPath: startingPosition.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5,
+        type: 3}
+      propertyPath: attackDamage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5,
+        type: 3}
+      propertyPath: hitPoints
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5073615799330617307, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
       propertyPath: m_Name
-      value: BaseCharacter (1)
+      value: Warrior
       objectReference: {fileID: 0}
     - target: {fileID: 8084598398704928200, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
@@ -18850,7 +18875,7 @@ PrefabInstance:
     - target: {fileID: 6720455649233435854, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
         type: 3}
       propertyPath: m_Name
-      value: BaseCharacter_Red
+      value: Enemy Guard
       objectReference: {fileID: 0}
     - target: {fileID: 7717062094608502493, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
         type: 3}

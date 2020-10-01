@@ -53,6 +53,9 @@ public class CharacterActionController : MonoBehaviourPun
             case ECharacterAction.SPRINT:
                 OnSprintButtonClicked();
                 break;
+            case ECharacterAction.SLASH:
+                OnSlashButtonClicked();
+                break;
             default:
                 Debug.LogError("Action " + action.ToString() + " not covered in switch case! Nothing will happen when you click on the button!");
                 break;
@@ -93,6 +96,19 @@ public class CharacterActionController : MonoBehaviourPun
         foreach(var tile in tilesInRange)
         {
             if(IsEnemyCharacterOnTile(tile))
+            {
+                tile.EnableMovementRangeHighlight(currentlySelectedCharacter.tileHighlightColor);
+            }
+        }
+    }
+
+    void OnSlashButtonClicked()
+    {
+        tilesInRange = TileMapTools.GetTilesWithinMovementRange(map, currentlySelectedCharacter.occupyingTile
+            , 1);
+        foreach (var tile in tilesInRange)
+        {
+            if (IsEnemyCharacterOnTile(tile))
             {
                 tile.EnableMovementRangeHighlight(currentlySelectedCharacter.tileHighlightColor);
             }
@@ -153,6 +169,9 @@ public class CharacterActionController : MonoBehaviourPun
                     }
                 }
                 break;
+            case ECharacterAction.SLASH:
+                TrySlash();
+                break;
             default:
                 Debug.LogError("The case for action " + currentlySelectedAction.ToString() + " has not been covered!");
                 break;
@@ -172,7 +191,28 @@ public class CharacterActionController : MonoBehaviourPun
                     currentlySelectedCharacter.Attack(character);
                 }
                 break;
+            case ECharacterAction.SLASH:
+                TrySlash();
+                break;
         }
+    }
+
+    void TrySlash()
+    {
+        List<CCharacter> targets = new List<CCharacter>();
+
+        if (currentlySelectedCharacter.CanTakeAction(ECharacterAction.SLASH))
+        {
+            foreach(var tile in tilesInRange)
+            {
+                if(IsEnemyCharacterOnTile(tile))
+                {
+                    targets.Add(GetCharacterOnTile(tile));
+                }
+            }
+        }
+
+        currentlySelectedCharacter.Slash(targets);
     }
 
     public bool IsAnyCharacterOnTile(CTile tile)

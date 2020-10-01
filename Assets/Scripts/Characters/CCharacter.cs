@@ -155,6 +155,8 @@ public class CCharacter : MonoBehaviour
         CharacterEvents.actionTakenEvent.Invoke(this, ECharacterAction.ATTACK);
     }
 
+    public virtual void Slash(List<CCharacter> targets) { }
+
     [PunRPC]
     public void OnAttacked(int damage)
     {

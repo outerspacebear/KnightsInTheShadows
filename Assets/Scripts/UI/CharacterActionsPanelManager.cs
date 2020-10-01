@@ -197,7 +197,8 @@ public class CharacterActionsPanelManager : MonoBehaviour
         new Dictionary<ECharacterAction, string>{
             { ECharacterAction.MOVE, "Move" },
             {ECharacterAction.ATTACK, "Attack" },
-            {ECharacterAction.SPRINT, "Sprint" } };
+            {ECharacterAction.SPRINT, "Sprint" },
+            {ECharacterAction.SLASH, "Slash" } };
     Sprite[] actionIcons;
 
     //PlayerPrefs

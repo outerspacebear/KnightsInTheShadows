@@ -44,6 +44,9 @@ public class CharacterActionAudioPlayer : MonoBehaviour
             case ECharacterAction.ATTACK:
                 clipToPlay = attackSound;
                 break;
+            case ECharacterAction.SLASH:
+                clipToPlay = slashSound;
+                break;
             default:
                 Debug.LogWarning("This should never happen! Case for a character action not covered in switch!");
                 break;
@@ -71,4 +74,6 @@ public class CharacterActionAudioPlayer : MonoBehaviour
     AudioClip attackSound = null;
     [SerializeField]
     AudioClip deathSound = null;
+    [SerializeField]
+    AudioClip slashSound = null;
 }
