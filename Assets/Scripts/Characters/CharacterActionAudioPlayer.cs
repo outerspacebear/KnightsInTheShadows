@@ -14,7 +14,12 @@ public class CharacterActionAudioPlayer : MonoBehaviour
             return;
         }
 
+        float soundVolume = PlayerPrefs.GetFloat("soundVolume");
+        float masterVolume = PlayerPrefs.GetFloat("masterVolume");
+        volume = soundVolume * masterVolume;
+
         audioSource = GetComponent<AudioSource>();
+        audioSource.volume = volume;
 
         CharacterEvents.actionTakenEvent.AddListener(OnCharacterActionTaken);
         CharacterEvents.characterDeathEvent.AddListener(OnCharacterDeath);
@@ -76,4 +81,6 @@ public class CharacterActionAudioPlayer : MonoBehaviour
     AudioClip deathSound = null;
     [SerializeField]
     AudioClip slashSound = null;
+
+    float volume = 0;
 }

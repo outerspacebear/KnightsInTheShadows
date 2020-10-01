@@ -8089,6 +8089,7 @@ GameObject:
   m_Component:
   - component: {fileID: 984055991}
   - component: {fileID: 984055992}
+  - component: {fileID: 984055993}
   m_Layer: 0
   m_Name: Global
   m_TagString: Untagged
@@ -8209,6 +8210,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &984055993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984055990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 907aa5de46536294998dd30b5ec59d72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefNames:
+  - masterVolume
+  - musicVolume
 --- !u!1 &1029762612
 GameObject:
   m_ObjectHideFlags: 0
@@ -12244,6 +12260,7 @@ MonoBehaviour:
   moveSound: {fileID: 8300000, guid: 3efc4218c5a1b8c46b6044eea1110362, type: 3}
   attackSound: {fileID: 8300000, guid: ec5e5e0da1eaea24fbc1c91d81f90af9, type: 3}
   deathSound: {fileID: 8300000, guid: fa4a6b15554d96f448a77f2531a44f94, type: 3}
+  slashSound: {fileID: 8300000, guid: 007874ff51e634443aefe2acd995f051, type: 3}
 --- !u!82 &1472697383
 AudioSource:
   m_ObjectHideFlags: 0
