@@ -16,6 +16,8 @@ public class MenuButtonsSoundPlayer : MonoBehaviour
         }
 
         audioSource = GetComponent<AudioSource>();
+
+        audioSource.volume = PlayerPrefs.GetFloat("masterVolume") * PlayerPrefs.GetFloat("soundVolume");
     }
 
     void OnButtonClicked()
