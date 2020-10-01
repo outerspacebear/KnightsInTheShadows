@@ -8,7 +8,7 @@ using Photon.Pun;
 
 public class CCharacter : MonoBehaviour
 {
-    public ECharacterAction[] availableActions { get; } = { ECharacterAction.MOVE, ECharacterAction.ATTACK };
+    public virtual ECharacterAction[] availableActions { get; } = { ECharacterAction.MOVE, ECharacterAction.ATTACK };
 
     public void ResetActionPoints()
     {
@@ -119,6 +119,11 @@ public class CCharacter : MonoBehaviour
 
         MoveTo(targetTile);
     }
+    [PunRPC]
+    public virtual void SprintToTileAtPosition(Vector3 position)
+    {
+
+    }
 
     public void MoveTo(CTile tile)
     {
@@ -130,10 +135,12 @@ public class CCharacter : MonoBehaviour
         CharacterEvents.actionTakenEvent.Invoke(this, ECharacterAction.MOVE);
     }
 
+    public virtual void SprintTo(CTile tile) { }
+
     public void Attack(CCharacter character)
     {
         Debug.Log("Character " + name + " is attacking character " + character.name + "!");
-        currentActionPoints -= CharacterActions.actionCostMap[ECharacterAction.MOVE];
+        currentActionPoints -= CharacterActions.actionCostMap[ECharacterAction.ATTACK];
 
         if(!isMultiplayerLevel)
         {
@@ -197,23 +204,23 @@ public class CCharacter : MonoBehaviour
     public Color tileHighlightColor = Color.cyan;
 
     [SerializeField]
-    int movementPerAction;
+    protected int movementPerAction;
     [SerializeField]
-    private int baseActionPoints;
+    protected int baseActionPoints;
     [SerializeField]
-    int attackRange = 1;
+    protected int attackRange = 1;
     [SerializeField]
-    int attackDamage = 1;
+    protected int attackDamage = 1;
     [SerializeField]
-    int hitPoints;
+    protected int hitPoints;
     [SerializeField]
-    Vector3 startingPosition;
+    protected Vector3 startingPosition;
 
     static GameObject playerHighlilghter;
     static Vector3 playerHighlighterDefaultPosition;
 
-    TileMap map;
-    bool isMultiplayerLevel = false;
+    protected TileMap map;
+    protected bool isMultiplayerLevel = false;
 
     bool loadedState = false;
 }

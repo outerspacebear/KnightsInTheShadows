@@ -78,8 +78,11 @@ public class CharacterActionsPanelManager : MonoBehaviour
                 return;
             }
 
-            button.Select();
-            button.onClick.Invoke();
+            if(button.interactable)
+            {
+                button.Select();
+                button.onClick.Invoke();
+            }
         }
     }
 
@@ -91,6 +94,7 @@ public class CharacterActionsPanelManager : MonoBehaviour
 
     void OnCharacterSelected(CCharacter character)
     {
+        currentlySelectedCharacter = character;
         actionPanel.SetActive(true);
         availableActions = new List<ECharacterAction>(character.availableActions);
         UpdatePanel();
@@ -108,6 +112,7 @@ public class CharacterActionsPanelManager : MonoBehaviour
 
     void OnCharacterDeselected(CCharacter character)
     {
+        currentlySelectedCharacter = null;
         actionPanel.SetActive(false);
         actionDescriptionPanel.gameObject.SetActive(false);
         availableActions = null;
@@ -127,6 +132,10 @@ public class CharacterActionsPanelManager : MonoBehaviour
             }
 
             actionButtons[actionButtonIndex].SetAction(action, actionIcon);
+            if(!currentlySelectedCharacter.CanTakeAction(action))
+            {
+                actionButtons[actionButtonIndex].DisableButton();
+            }
             ++actionButtonIndex;
         }
 
@@ -181,12 +190,14 @@ public class CharacterActionsPanelManager : MonoBehaviour
     List<CCharacterActionButton> actionButtons;
 
     List<ECharacterAction> availableActions;
+    CCharacter currentlySelectedCharacter;
 
     const string actionIconsPath = "Prefabs/UI/Actions";
     Dictionary<ECharacterAction, string> actionIconPrefabNames = 
         new Dictionary<ECharacterAction, string>{
             { ECharacterAction.MOVE, "Move" },
-            {ECharacterAction.ATTACK, "Attack" }};
+            {ECharacterAction.ATTACK, "Attack" },
+            {ECharacterAction.SPRINT, "Sprint" } };
     Sprite[] actionIcons;
 
     //PlayerPrefs

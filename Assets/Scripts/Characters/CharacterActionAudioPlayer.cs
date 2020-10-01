@@ -38,6 +38,7 @@ public class CharacterActionAudioPlayer : MonoBehaviour
         switch(action)
         {
             case ECharacterAction.MOVE:
+            case ECharacterAction.SPRINT:
                 clipToPlay = moveSound;
                 break;
             case ECharacterAction.ATTACK:

@@ -19,6 +19,11 @@ public class CCharacterActionButton : MonoBehaviour
         buttonComponent.enabled = true;
     }
 
+    public void DisableButton()
+    {
+        buttonComponent.interactable = false;
+    }
+
     public void ResetButton()
     {
         iconImageComponent.enabled = false;

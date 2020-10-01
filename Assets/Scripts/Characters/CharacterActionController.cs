@@ -50,6 +50,9 @@ public class CharacterActionController : MonoBehaviourPun
             case ECharacterAction.ATTACK:
                 OnAttackButtonClicked();
                 break;
+            case ECharacterAction.SPRINT:
+                OnSprintButtonClicked();
+                break;
             default:
                 Debug.LogError("Action " + action.ToString() + " not covered in switch case! Nothing will happen when you click on the button!");
                 break;
@@ -63,6 +66,20 @@ public class CharacterActionController : MonoBehaviourPun
         foreach (var tile in tilesInRange)
         {
             if(!IsAnyCharacterOnTile(tile))
+            {
+                tile.EnableMovementRangeHighlight(currentlySelectedCharacter.tileHighlightColor);
+            }
+        }
+    }
+
+    void OnSprintButtonClicked()
+    {
+        int movementPointsForSprint = currentlySelectedCharacter.GetMovementPerAction() * 3;
+        tilesInRange = TileMapTools.GetTilesWithinMovementRange(map, currentlySelectedCharacter.occupyingTile
+            , movementPointsForSprint);
+        foreach (var tile in tilesInRange)
+        {
+            if (!IsAnyCharacterOnTile(tile))
             {
                 tile.EnableMovementRangeHighlight(currentlySelectedCharacter.tileHighlightColor);
             }
@@ -117,6 +134,22 @@ public class CharacterActionController : MonoBehaviourPun
                     {
                         PhotonView photonView = currentlySelectedCharacter.GetComponent<PhotonView>();
                         photonView.RPC("MoveToTileAtPosition", RpcTarget.All, tile.transform.position);
+                    }
+                }
+                break;
+            case ECharacterAction.SPRINT:
+                if(currentlySelectedCharacter.CanTakeAction(ECharacterAction.SPRINT)
+                    && tilesInRange.Contains(tile)
+                    && !IsAnyCharacterOnTile(tile))
+                {
+                    if (!isLevelMultiplayer)
+                    {
+                        currentlySelectedCharacter.SprintTo(tile);
+                    }
+                    else
+                    {
+                        PhotonView photonView = currentlySelectedCharacter.GetComponent<PhotonView>();
+                        photonView.RPC("SprintToTileAtPosition", RpcTarget.All, tile.transform.position);
                     }
                 }
                 break;

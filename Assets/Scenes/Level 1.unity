@@ -8260,7 +8260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characters:
   - {fileID: 2107503666}
-  - {fileID: 1867077384}
+  - {fileID: 1867077386}
   teamNumber: 1
 --- !u!1 &1030961688
 GameObject:
@@ -16830,10 +16830,15 @@ PrefabInstance:
       propertyPath: startingPosition.z
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5073615799330617307, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
       propertyPath: m_Name
-      value: BaseCharacter (1)
+      value: Scout
       objectReference: {fileID: 0}
     - target: {fileID: 8084598398704928200, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
@@ -16895,7 +16900,8 @@ PrefabInstance:
       propertyPath: characterCanvas
       value: 
       objectReference: {fileID: 1867077383}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b727813fc68cdab4cabf8049db657fc5, type: 3}
 --- !u!1 &1867077383 stripped
 GameObject:
@@ -16903,18 +16909,31 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1867077382}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1867077384 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5,
+--- !u!1 &1867077385 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5073615799330617307, guid: b727813fc68cdab4cabf8049db657fc5,
     type: 3}
   m_PrefabInstance: {fileID: 1867077382}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &1867077386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867077385}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b362603e624b094892548f7ed5fe5b4, type: 3}
+  m_Script: {fileID: 11500000, guid: ed15649f10db61e48b01a4b562a86d40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileHighlightColor: {r: 0, g: 1, b: 1, a: 1}
+  movementPerAction: 2
+  baseActionPoints: 2
+  attackRange: 1
+  attackDamage: 1
+  hitPoints: 3
+  startingPosition: {x: 3, y: 0, z: 2}
 --- !u!1001 &1873848375
 PrefabInstance:
   m_ObjectHideFlags: 0
