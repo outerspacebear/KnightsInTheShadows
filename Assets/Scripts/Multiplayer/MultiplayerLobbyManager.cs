@@ -58,7 +58,7 @@ public class MultiplayerLobbyManager : MonoBehaviourPunCallbacks
         base.OnPlayerEnteredRoom(newPlayer);
         if(PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
-            PhotonNetwork.LoadLevel(3);
+            PhotonNetwork.LoadLevel(2);
         }
     }
 

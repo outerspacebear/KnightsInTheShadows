@@ -455,6 +455,11 @@ PrefabInstance:
       propertyPath: startingPosition.x
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 3342295274773816794, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
+        type: 3}
+      propertyPath: attackRange
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3342295276056692913, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
         type: 3}
       propertyPath: m_Sources.Array.data[0].sourceTransform
@@ -483,7 +488,7 @@ PrefabInstance:
     - target: {fileID: 6720455649233435854, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
         type: 3}
       propertyPath: m_Name
-      value: T2 C2
+      value: Archer
       objectReference: {fileID: 0}
     - target: {fileID: 7717062094608502493, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
         type: 3}
@@ -598,7 +603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characters:
-  - {fileID: 3342295274971776716}
+  - {fileID: 3342295274971776718}
   - {fileID: 48052147}
   teamNumber: 2
 --- !u!1001 &159333315
@@ -4778,10 +4783,15 @@ PrefabInstance:
       propertyPath: hitPoints
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5,
+        type: 3}
+      propertyPath: attackRange
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5073615799330617307, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
       propertyPath: m_Name
-      value: Team 1 C2
+      value: Archer
       objectReference: {fileID: 0}
     - target: {fileID: 8084598398704928200, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
@@ -7810,7 +7820,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characters:
-  - {fileID: 1325925173}
+  - {fileID: 1325925175}
   - {fileID: 711739645}
   teamNumber: 1
 --- !u!4 &1248712759
@@ -8368,7 +8378,7 @@ PrefabInstance:
     - target: {fileID: 5073615799330617307, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
       propertyPath: m_Name
-      value: Team 1 C1
+      value: Knight
       objectReference: {fileID: 0}
     - target: {fileID: 8084598398704928200, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
@@ -8430,7 +8440,8 @@ PrefabInstance:
       propertyPath: characterCanvas
       value: 
       objectReference: {fileID: 1325925172}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b727813fc68cdab4cabf8049db657fc5, type: 3}
 --- !u!1 &1325925172 stripped
 GameObject:
@@ -8438,24 +8449,31 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1325925171}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1325925173 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1325925171}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1325925174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b362603e624b094892548f7ed5fe5b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1325925174 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5073615799330617307, guid: b727813fc68cdab4cabf8049db657fc5,
     type: 3}
   m_PrefabInstance: {fileID: 1325925171}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1325925175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325925174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb1144bc8d996fa4c993ebafc4e74f60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileHighlightColor: {r: 0, g: 1, b: 1, a: 1}
+  movementPerAction: 1
+  baseActionPoints: 2
+  attackRange: 1
+  attackDamage: 2
+  hitPoints: 5
+  startingPosition: {x: 2, y: 0, z: 2}
 --- !u!114 &1325925176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14297,7 +14315,7 @@ PrefabInstance:
     - target: {fileID: 6720455649233435854, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
         type: 3}
       propertyPath: m_Name
-      value: T2 C1
+      value: Scout
       objectReference: {fileID: 0}
     - target: {fileID: 7717062094608502493, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
         type: 3}
@@ -14354,17 +14372,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3342295274773816794, guid: 6d524e355cf87ce4d98e887c7d0b4ee2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6d524e355cf87ce4d98e887c7d0b4ee2, type: 3}
---- !u!114 &3342295274971776716 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3342295274773816794, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
+--- !u!1 &3342295274971776717 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6720455649233435854, guid: 6d524e355cf87ce4d98e887c7d0b4ee2,
     type: 3}
   m_PrefabInstance: {fileID: 3342295274971776715}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &3342295274971776718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3342295274971776717}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b362603e624b094892548f7ed5fe5b4, type: 3}
+  m_Script: {fileID: 11500000, guid: ed15649f10db61e48b01a4b562a86d40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileHighlightColor: {r: 0, g: 1, b: 1, a: 1}
+  movementPerAction: 2
+  baseActionPoints: 2
+  attackRange: 1
+  attackDamage: 1
+  hitPoints: 2
+  startingPosition: {x: 8, y: 0, z: 8}

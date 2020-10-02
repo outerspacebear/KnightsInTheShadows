@@ -6,6 +6,13 @@ using UnityEngine.UI;
 [RequireComponent(typeof(AudioSource))]
 public class MenuButtonsSoundPlayer : MonoBehaviour
 {
+    public void UpdateVolume()
+    {
+        audioSource = GetComponent<AudioSource>();
+
+        audioSource.volume = PlayerPrefs.GetFloat("masterVolume") * PlayerPrefs.GetFloat("soundVolume");
+    }
+
     // Start is called before the first frame update
     void Start()
     {

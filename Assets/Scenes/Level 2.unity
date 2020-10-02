@@ -6247,7 +6247,7 @@ MonoBehaviour:
   attackRange: 1
   attackDamage: 2
   hitPoints: 7
-  startingPosition: {x: 1, y: 0, z: 1}
+  startingPosition: {x: 2, y: 0, z: 1}
 --- !u!1001 &535999834
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14137,7 +14137,7 @@ PrefabInstance:
     - target: {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}
       propertyPath: startingPosition.x
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3839590976211807788, guid: b727813fc68cdab4cabf8049db657fc5,
         type: 3}

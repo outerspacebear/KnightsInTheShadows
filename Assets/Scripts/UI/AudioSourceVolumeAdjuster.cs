@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class AudioSourceVolumeAdjuster : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void UpdateVolume()
     {
         float finalVolume = 1f;
-        foreach(string pref in playerPrefNames)
+        foreach (string pref in playerPrefNames)
         {
             finalVolume = finalVolume * PlayerPrefs.GetFloat(pref);
         }
 
         GetComponent<AudioSource>().volume = finalVolume;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        UpdateVolume();
     }
 
     // Update is called once per frame

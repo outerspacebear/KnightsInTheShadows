@@ -1,47 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <save_game>
-  <scene_index>2</scene_index>
+  <scene_name>Level 2</scene_name>
   <team name="Team 1">
     <character>
-      <c_name>BaseCharacter</c_name>
-      <action_points>2</action_points>
+      <c_name>Knight</c_name>
+      <action_points>0</action_points>
       <hit_points>5</hit_points>
       <position>
-        <x>2</x>
+        <x>5</x>
         <y>0</y>
-        <z>2</z>
+        <z>5</z>
       </position>
     </character>
     <character>
-      <c_name>BaseCharacter (1)</c_name>
+      <c_name>Warrior</c_name>
       <action_points>2</action_points>
-      <hit_points>5</hit_points>
+      <hit_points>2</hit_points>
       <position>
-        <x>3</x>
+        <x>9</x>
         <y>0</y>
-        <z>2</z>
+        <z>4</z>
       </position>
     </character>
   </team>
   <team name="Enemy Team">
     <character>
-      <c_name>BaseCharacter_Red</c_name>
-      <action_points>2</action_points>
+      <c_name>Enemy Knight</c_name>
+      <action_points>0</action_points>
       <hit_points>3</hit_points>
       <position>
-        <x>8</x>
+        <x>10</x>
         <y>0</y>
-        <z>8</z>
-      </position>
-    </character>
-    <character>
-      <c_name>BaseCharacter_Red (1)</c_name>
-      <action_points>2</action_points>
-      <hit_points>3</hit_points>
-      <position>
-        <x>9</x>
-        <y>0</y>
-        <z>8</z>
+        <z>4</z>
       </position>
     </character>
   </team>

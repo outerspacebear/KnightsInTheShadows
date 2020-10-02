@@ -10,6 +10,7 @@ public class CharacterFollowerCamera : MonoBehaviour
     void Start()
     {
         CharacterEvents.characterSelectedEvent.AddListener(FocusOnCharacter);
+        CharacterEvents.aiActionTakenEvent.AddListener((CCharacter character, ECharacterAction action) => FocusOnCharacter(character));
     }
 
     // Update is called once per frame

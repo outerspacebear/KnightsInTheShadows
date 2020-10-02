@@ -59,12 +59,18 @@ public class CTile : MonoBehaviour
 
     public void EnableMovementRangeHighlight(Color color)
     {
-        meshRenderer.material.color = color;
+        foreach(var renderer in meshRenderers)
+        {
+            renderer.Key.material.color = color;
+        }
     }
 
     public void DisableMovementRangeHighlight()
     {
-        meshRenderer.material.color = meshRendererOriginalColour;
+        foreach (var renderer in meshRenderers)
+        {
+            renderer.Key.material.color = renderer.Value;
+        }
     }
 
     private void Awake()
@@ -75,8 +81,11 @@ public class CTile : MonoBehaviour
             tileHighlighterOriginalPosition = tileHighlighter.transform.position;
         }
 
-        meshRenderer = gameObject.GetComponentInChildren<MeshRenderer>();
-        meshRendererOriginalColour = meshRenderer.material.color;
+        var renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+        foreach(var renderer in renderers)
+        {
+            meshRenderers.Add(renderer, renderer.material.color);
+        }
     }
 
     // Update is called once per frame
@@ -120,8 +129,7 @@ public class CTile : MonoBehaviour
     private static GameObject tileHighlighter;
     private static Vector3 tileHighlighterOriginalPosition;
 
-    MeshRenderer meshRenderer;
-    Color meshRendererOriginalColour;
+    Dictionary<MeshRenderer, Color> meshRenderers = new Dictionary<MeshRenderer, Color>();
 
     [SerializeField][Tooltip("Directions in which the tile has a wall (to block movement)")]
     List<EDirection> wallDirections = null;
