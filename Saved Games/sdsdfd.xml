@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<save_game>
+  <scene_name>Level 1</scene_name>
+  <team name="Team 1">
+    <character>
+      <c_name>Archer</c_name>
+      <action_points>2</action_points>
+      <hit_points>2</hit_points>
+      <position>
+        <x>2</x>
+        <y>0</y>
+        <z>2</z>
+      </position>
+    </character>
+    <character>
+      <c_name>Scout</c_name>
+      <action_points>2</action_points>
+      <hit_points>3</hit_points>
+      <position>
+        <x>3</x>
+        <y>0</y>
+        <z>2</z>
+      </position>
+    </character>
+  </team>
+  <team name="Enemy Team">
+    <character>
+      <c_name>Enemy Knight</c_name>
+      <action_points>2</action_points>
+      <hit_points>3</hit_points>
+      <position>
+        <x>8</x>
+        <y>0</y>
+        <z>8</z>
+      </position>
+    </character>
+    <character>
+      <c_name>Enemy Knight</c_name>
+      <action_points>2</action_points>
+      <hit_points>3</hit_points>
+      <position>
+        <x>9</x>
+        <y>0</y>
+        <z>8</z>
+      </position>
+    </character>
+  </team>
+</save_game>

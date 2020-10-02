@@ -3969,7 +3969,7 @@ GameObject:
   - component: {fileID: 423341004}
   - component: {fileID: 423341005}
   m_Layer: 0
-  m_Name: Level Objectives
+  m_Name: Level Objective 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8111,6 +8111,7 @@ Transform:
   - {fileID: 1472697377}
   - {fileID: 526805625}
   - {fileID: 423341004}
+  - {fileID: 1900679351}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12199,7 +12200,7 @@ MonoBehaviour:
   teams:
   - {fileID: 1029762614}
   - {fileID: 314505791}
-  levelName: Level-1.xml
+  levelName: Levels/Level-1
   tileWidth: 1
   tileHeight: 1
   mapLoadStartingPosition: {x: 0, y: 0, z: 0}
@@ -12209,6 +12210,7 @@ MonoBehaviour:
   loadingScreen: {fileID: 1630071845}
   targetLevelObjectives:
   - {fileID: 423341005}
+  - {fileID: 1900679352}
   isMultiplayerLevel: 0
 --- !u!114 &1472697380
 MonoBehaviour:
@@ -16967,6 +16969,53 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1889190175}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1900679350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1900679351}
+  - component: {fileID: 1900679352}
+  m_Layer: 0
+  m_Name: Level Objective 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1900679351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900679350}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 984055991}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1900679352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900679350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fdb61538f97e624d9080cdaa926a17e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  objectiveForTeam: {fileID: 314505791}
+  teamToEliminate: {fileID: 1029762614}
+  characterToEliminate: {fileID: 0}
 --- !u!1001 &1901185217
 PrefabInstance:
   m_ObjectHideFlags: 0

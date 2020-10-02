@@ -35,6 +35,11 @@ public class SaveManager : MonoBehaviour
 
         XDocument xSaveGame = new XDocument(xRoot);
 
+        if(!Directory.Exists(saveFolderName))
+        {
+            Directory.CreateDirectory(saveFolderName);
+        }
+
         string saveFileName = saveFolderName + "/" + name + ".xml";
         xSaveGame.Save(saveFileName);
 

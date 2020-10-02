@@ -24,8 +24,9 @@ public class MapLoader
         TileMap.Map loadedMap = new TileMap.Map();
         loadedMap.rows = new List<TileMap.Row>();
 
-        XDocument xFile = XDocument.Load(sourceFile);
-        if(xFile == null)
+        var mapText = Resources.Load<TextAsset>(sourceFile);
+        XDocument xFile = XDocument.Parse(mapText.text);
+        if (xFile == null)
         {
             Debug.LogError("No map file found at path " + sourceFile + "; Loading failed!");
             return null;

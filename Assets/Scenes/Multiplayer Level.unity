@@ -5294,7 +5294,7 @@ MonoBehaviour:
   teams:
   - {fileID: 1248712758}
   - {fileID: 115134414}
-  levelName: Level-1.xml
+  levelName: Levels/Level-1
   tileWidth: 1
   tileHeight: 1
   mapLoadStartingPosition: {x: 0, y: 0, z: 0}
